@@ -215,6 +215,12 @@
   .signal-chip .s-value{ font-size:13.5px; font-weight:700; color:var(--ink); }
 
   .test-link{ text-align:center; margin-top:-6px; }
+  .how-card{
+    background:var(--paper); border:1.5px solid var(--line); border-radius:var(--radius-md);
+    padding:14px 16px; display:flex; flex-direction:column; gap:8px;
+  }
+  .how-list{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; }
+  .how-list li{ font-size:12px; color:var(--ink-soft); line-height:1.5; }
   .perm-banner{
     background:var(--amber-soft); border:1.5px solid var(--amber); border-radius:var(--radius-md);
     padding:12px 14px; font-size:12.5px; color:#5A4413; line-height:1.5;
@@ -434,6 +440,17 @@
 
         <div class="test-link">
           <button class="link-btn" id="simulateBtn" type="button">Simulate accident (test)</button>
+        </div>
+
+        <div class="how-card">
+          <p class="section-title">Ye kaam kaise karta hai</p>
+          <ol class="how-list">
+            <li>Detection ON karte hi phone ke motion aur location sensors chalu ho jaate hain.</li>
+            <li>Speed, Rotation aur Impact — teeno signal alag-alag monitor hote hain.</li>
+            <li>Jab teeno ek saath trip ho jaayein, to 20-second countdown shuru hota hai.</li>
+            <li>Aap theek hain to Cancel dabaakar rok sakte hain.</li>
+            <li>Cancel na kiya to family/favourites ko location ke saath alert chala jaata hai.</li>
+          </ol>
         </div>
       </div>
 
