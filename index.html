@@ -262,6 +262,14 @@
   .alert-card .a-time{ font-size:10.5px; color:var(--ink-soft); flex-shrink:0; }
   .alert-card .a-msg{ font-size:12.5px; color:var(--ink-soft); line-height:1.45; }
   .alert-card .a-tag{ font-size:10px; font-weight:700; color:var(--brick); text-transform:uppercase; letter-spacing:.03em; }
+  .alert-card .a-location{
+    display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--teal);
+    text-decoration:none; margin-top:2px;
+  }
+  .alert-card .a-location svg{ width:14px; height:14px; flex-shrink:0; }
+  .alert-card .a-location-missing{ color:var(--ink-soft); font-weight:500; }
+  .alert-card .call-links{ margin-top:4px; }
+  .alert-card .call-chip{ padding:6px 10px; font-size:11.5px; }
 
   /* ---------- Profile ---------- */
   .avatar-upload{ display:flex; align-items:center; gap:14px; }
@@ -1126,12 +1134,25 @@ function renderAlerts(){
     list.innerHTML = `<div class="empty-state">${alertsTab==='received' ? 'Koi alert receive nahi hua' : 'Aapne koi alert nahi bheja'}</div>`;
     return;
   }
-  list.innerHTML = filtered.map(a=>`
-    <div class="alert-card">
+  list.innerHTML = filtered.map(a=>{
+    const mapsLink = (a.lat!=null && a.lng!=null) ? `https://www.google.com/maps?q=${a.lat},${a.lng}` : null;
+    const calls = [
+      { label:'Contact', number:a.contact_number },
+      { label:'Family', number:a.fam_phone },
+      { label:'Police', number:a.police_number },
+      { label:'Ambulance', number:a.ambulance_number },
+    ].filter(c=>c.number);
+    return `<div class="alert-card">
       <div class="a-top"><span class="a-name">${escapeHtml(alertsTab==='received'? a.from_name : (a.to_username || 'Broadcast'))}</span><span class="a-time">${fmtTime(a.created_at)}</span></div>
       <div class="a-tag">${a.to_username ? 'Direct alert' : 'Broadcast alert'}</div>
       <div class="a-msg">${escapeHtml(a.message)}</div>
-    </div>`).join('');
+      ${mapsLink ? `<a class="a-location" href="${mapsLink}" target="_blank" rel="noopener">${locationIcon()}Location dekhein (${a.lat.toFixed(4)}, ${a.lng.toFixed(4)})</a>` : '<div class="a-location a-location-missing">Location available nahi hai</div>'}
+      ${calls.length ? `<div class="call-links">${calls.map(c=>`<a class="call-chip danger" href="tel:${c.number}">${callIcon()}${c.label} · ${c.number}</a>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+function locationIcon(){
+  return `<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-11.5A7 7 0 105 9.5C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.3" stroke="currentColor" stroke-width="1.6"/></svg>`;
 }
 
 function subscribeAlerts(){
