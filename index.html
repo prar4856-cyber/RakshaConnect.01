@@ -5,22 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>RakshaConnect — Accident Alert</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700">
 <style>
   :root{
-    --cream:#F2ECDD;
-    --backdrop:#E4D9BC;
-    --paper:#FBF8EF;
-    --teal:#1B4744;
-    --teal-deep:#0F2E2B;
-    --teal-soft:#DCE7E2;
-    --brick:#B23A2E;
-    --brick-soft:#F6E1DC;
-    --amber:#D89B3C;
-    --amber-soft:#F5E6C8;
-    --ink:#241F18;
-    --ink-soft:#6B6152;
-    --line:#DFD2AF;
+    --cream:#F9FCFF;
+    --backdrop:#E9ECF1;
+    --paper:#FFFFFF;
+    --teal:#1B2032;
+    --teal-deep:#12151F;
+    --teal-soft:#E7E8ED;
+    --brick:#F5325C;
+    --brick-soft:#FDE1E8;
+    --amber:#FFAA17;
+    --amber-soft:#FFF1D9;
+    --ink:#232A34;
+    --ink-soft:#747474;
+    --line:#E5E5E8;
+    --font-body:'Poppins', sans-serif;
+    --font-head:'Oswald', sans-serif;
     --radius-lg:22px;
     --radius-md:16px;
     --radius-sm:11px;
@@ -28,9 +31,9 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:'Sora',system-ui,-apple-system,sans-serif;
+    font-family:var(--font-body);
     background:var(--backdrop);
-    color:var(--ink);
+    color:var(--ink-soft);
     min-height:100vh;
     display:flex;
     justify-content:center;
@@ -38,6 +41,7 @@
     -webkit-tap-highlight-color:transparent;
   }
   button, input, select, textarea{ font-family:inherit; }
+  h1, h2, h3, h4, h5, h6{ font-family:var(--font-head); color:var(--teal); font-weight:500; margin:0; }
   .shell{
     position:relative;
     width:100%;
@@ -55,7 +59,7 @@
       height:844px;
       margin-top:8px;
       border-radius:38px;
-      box-shadow:0 40px 70px -25px rgba(15,46,43,.45), 0 0 0 9px var(--teal-deep), 0 0 0 12px #08201d;
+      box-shadow:0 40px 70px -25px rgba(18,21,31,.35), 0 0 0 9px var(--teal-deep), 0 0 0 12px #090b12;
     }
   }
   .hidden{ display:none !important; }
@@ -78,10 +82,10 @@
     width:64px; height:64px; border-radius:20px;
     background:linear-gradient(155deg,var(--teal),var(--teal-deep));
     display:flex; align-items:center; justify-content:center;
-    box-shadow:0 10px 22px -8px rgba(15,46,43,.55);
+    box-shadow:0 10px 22px -8px rgba(18,21,31,.55);
   }
   .brand-mark svg{ width:34px; height:34px; }
-  .brand h1{ font-size:22px; font-weight:800; margin:0; letter-spacing:-.02em; color:var(--teal-deep); }
+  .brand h1{ font-family:var(--font-head); font-size:24px; font-weight:600; margin:0; letter-spacing:.02em; text-transform:uppercase; color:var(--teal-deep); }
   .brand p{ margin:0; font-size:13px; color:var(--ink-soft); text-align:center; line-height:1.4; }
 
   .segmented{
@@ -89,9 +93,10 @@
   }
   .seg-btn{
     flex:1; border:none; background:transparent; padding:10px 0; border-radius:999px;
-    font-weight:600; font-size:14px; color:var(--teal-deep); cursor:pointer; transition:.2s;
+    font-family:var(--font-head); font-weight:500; font-size:14px; letter-spacing:.03em; text-transform:uppercase;
+    color:var(--teal-deep); cursor:pointer; transition:.2s;
   }
-  .seg-btn.active{ background:var(--teal); color:#fff; box-shadow:0 6px 14px -6px rgba(15,46,43,.5); }
+  .seg-btn.active{ background:var(--teal); color:#fff; box-shadow:0 6px 14px -6px rgba(18,21,31,.5); }
 
   .auth-form{ display:flex; flex-direction:column; gap:12px; }
   .field{ display:flex; flex-direction:column; gap:6px; }
@@ -101,28 +106,29 @@
     padding:11px 13px; font-size:14.5px; color:var(--ink); outline:none; transition:.15s;
   }
   .field textarea{ resize:vertical; min-height:56px; }
-  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--teal); box-shadow:0 0 0 3px rgba(27,71,68,.14); }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--teal); box-shadow:0 0 0 3px rgba(27,32,50,.16); }
   .field-row{ display:flex; gap:10px; }
   .field-row .field{ flex:1; }
 
   .btn{
-    border:none; border-radius:var(--radius-sm); padding:13px 16px; font-weight:700; font-size:14.5px;
+    border:none; border-radius:var(--radius-sm); padding:13px 16px;
+    font-family:var(--font-head); font-weight:500; font-size:14.5px; letter-spacing:.03em; text-transform:uppercase;
     cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center; gap:8px;
   }
   .btn:active{ transform:scale(.98); }
-  .btn-primary{ background:var(--teal); color:#fff; box-shadow:0 8px 18px -8px rgba(15,46,43,.55); }
-  .btn-danger{ background:var(--brick); color:#fff; box-shadow:0 8px 18px -8px rgba(178,58,46,.55); }
-  .btn-amber{ background:var(--amber); color:#2E2410; }
+  .btn-primary{ background:var(--teal); color:#fff; box-shadow:0 8px 18px -8px rgba(18,21,31,.55); }
+  .btn-danger{ background:var(--brick); color:#fff; box-shadow:0 8px 18px -8px rgba(245,50,92,.45); }
+  .btn-amber{ background:var(--amber); color:var(--teal-deep); box-shadow:0 8px 18px -8px rgba(255,170,23,.5); }
   .btn-ghost{ background:transparent; color:var(--teal-deep); border:1.5px solid var(--line); }
   .btn-block{ width:100%; }
   .link-btn{
-    background:none; border:none; color:var(--teal); font-weight:600; font-size:13px; cursor:pointer;
-    padding:2px; text-align:center; text-decoration:underline; text-underline-offset:3px;
+    background:none; border:none; color:var(--amber); font-family:var(--font-head); font-weight:500; font-size:13px; cursor:pointer;
+    padding:2px; text-align:center; text-decoration:underline; text-underline-offset:3px; letter-spacing:.01em;
   }
 
   /* ---------- Modal / overlays ---------- */
   .modal-overlay, .overlay{
-    position:absolute; inset:0; background:rgba(15,46,43,.5); backdrop-filter:blur(2px);
+    position:absolute; inset:0; background:rgba(18,21,31,.55); backdrop-filter:blur(2px);
     display:flex; align-items:flex-end; justify-content:center; z-index:50; padding:0;
   }
   .modal-overlay.center, .overlay.center{ align-items:center; padding:24px; }
@@ -152,7 +158,7 @@
     overflow:hidden; flex-shrink:0;
   }
   .avatar img{ width:100%; height:100%; object-fit:cover; }
-  .who-name{ font-weight:700; font-size:15px; color:var(--ink); line-height:1.2; }
+  .who-name{ font-family:var(--font-head); font-weight:500; font-size:15px; color:var(--ink); line-height:1.2; letter-spacing:.01em; }
   .who-sub{ font-size:11.5px; color:var(--ink-soft); }
   .icon-btn{
     background:var(--teal-soft); border:none; width:38px; height:38px; border-radius:12px;
@@ -167,19 +173,20 @@
   }
   .nav-btn{
     flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px;
-    color:var(--ink-soft); font-size:10.5px; font-weight:600; cursor:pointer; padding:6px 0; border-radius:12px;
+    color:var(--ink-soft); font-family:var(--font-head); font-size:10.5px; font-weight:500; letter-spacing:.02em; text-transform:uppercase;
+    cursor:pointer; padding:6px 0; border-radius:12px;
   }
   .nav-btn svg{ width:21px; height:21px; }
-  .nav-btn.active{ color:var(--teal); }
+  .nav-btn.active{ color:var(--amber); }
 
   /* ---------- Home / Detector ---------- */
   .detector-card{ display:flex; flex-direction:column; align-items:center; gap:16px; padding-top:6px; }
   .ring-wrap{ position:relative; width:200px; height:200px; }
   .ring-bg, .ring-pulse{ position:absolute; inset:0; border-radius:50%; }
-  .ring-bg{ background:radial-gradient(circle at 50% 40%, #234D49, var(--teal-deep)); box-shadow:0 20px 40px -15px rgba(15,46,43,.55); }
+  .ring-bg{ background:radial-gradient(circle at 50% 40%, #2B3245, var(--teal-deep)); box-shadow:0 20px 40px -15px rgba(18,21,31,.55); }
   .ring-pulse{ border:3px solid var(--amber); opacity:0; transform:scale(1); }
   .ring-wrap.armed .ring-pulse{ animation:pulse 2.4s ease-out infinite; opacity:1; }
-  .ring-wrap.tripped .ring-bg{ background:radial-gradient(circle at 50% 40%, #7A2A22, var(--brick)); }
+  .ring-wrap.tripped .ring-bg{ background:radial-gradient(circle at 50% 40%, #7A1030, var(--brick)); }
   .ring-wrap.tripped .ring-pulse{ border-color:var(--brick); animation-duration:1s; }
   @keyframes pulse{
     0%{ transform:scale(.82); opacity:.65; }
@@ -202,7 +209,7 @@
     box-shadow:0 2px 6px rgba(0,0,0,.25); transition:.2s;
   }
   .toggle.on .knob{ left:27px; }
-  .toggle-label{ font-size:14px; font-weight:700; color:var(--ink); }
+  .toggle-label{ font-family:var(--font-head); font-size:14px; font-weight:500; color:var(--ink); letter-spacing:.02em; text-transform:uppercase; }
 
   .signals-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
   .signal-chip{
@@ -225,7 +232,7 @@
     background:var(--amber-soft); border:1.5px solid var(--amber); border-radius:var(--radius-md);
     padding:12px 14px; font-size:12.5px; color:#5A4413; line-height:1.5;
   }
-  .section-title{ font-size:14px; font-weight:700; color:var(--teal-deep); margin:0; }
+  .section-title{ font-family:var(--font-head); font-size:14px; font-weight:500; color:var(--teal-deep); margin:0; letter-spacing:.03em; text-transform:uppercase; }
 
   /* ---------- Contacts ---------- */
   .search-bar{
@@ -245,7 +252,7 @@
     border-radius:var(--radius-md); padding:11px 13px;
   }
   .user-row .meta{ flex:1; min-width:0; }
-  .user-row .u-name{ font-weight:700; font-size:14px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .user-row .u-name{ font-family:var(--font-head); font-weight:500; font-size:14px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .user-row .u-username{ font-size:12px; color:var(--ink-soft); }
   .row-actions{ display:flex; gap:6px; flex-shrink:0; }
   .row-actions button{ padding:8px 10px; font-size:12px; border-radius:9px; }
@@ -256,7 +263,8 @@
   .tabs{ display:flex; gap:8px; }
   .tab-btn{
     flex:1; padding:9px 0; border-radius:999px; border:1.5px solid var(--line); background:var(--paper);
-    font-size:13px; font-weight:700; color:var(--ink-soft); cursor:pointer;
+    font-family:var(--font-head); font-size:13px; font-weight:500; letter-spacing:.03em; text-transform:uppercase;
+    color:var(--ink-soft); cursor:pointer;
   }
   .tab-btn.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
   .alert-card{
@@ -264,7 +272,7 @@
     border-radius:var(--radius-md); padding:13px 14px; display:flex; flex-direction:column; gap:4px;
   }
   .alert-card .a-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
-  .alert-card .a-name{ font-weight:700; font-size:13.5px; color:var(--ink); }
+  .alert-card .a-name{ font-family:var(--font-head); font-weight:500; font-size:13.5px; color:var(--ink); }
   .alert-card .a-time{ font-size:10.5px; color:var(--ink-soft); flex-shrink:0; }
   .alert-card .a-msg{ font-size:12.5px; color:var(--ink-soft); line-height:1.45; }
   .alert-card .a-tag{ font-size:10px; font-weight:700; color:var(--brick); text-transform:uppercase; letter-spacing:.03em; }
@@ -290,10 +298,10 @@
 
   /* ---------- Countdown overlay ---------- */
   #countdownOverlay{ background:rgba(15,17,14,.88); flex-direction:column; gap:22px; padding:32px 26px; align-items:center; justify-content:center; z-index:80; }
-  .cd-title{ color:#fff; font-size:15px; font-weight:700; text-align:center; letter-spacing:.02em; }
+  .cd-title{ font-family:var(--font-head); color:#fff; font-size:16px; font-weight:500; text-align:center; letter-spacing:.04em; text-transform:uppercase; }
   .cd-num{
     width:150px; height:150px; border-radius:50%; border:5px solid var(--brick); display:flex; align-items:center;
-    justify-content:center; font-size:52px; font-weight:800; color:#fff; background:rgba(178,58,46,.18);
+    justify-content:center; font-size:52px; font-weight:800; color:#fff; background:rgba(245,50,92,.18);
   }
   .cd-sub{ color:#D8D2C4; font-size:12.5px; text-align:center; line-height:1.6; max-width:280px; }
 
@@ -319,7 +327,7 @@
     <div class="auth-wrap">
       <div class="brand">
         <div class="brand-mark">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F2ECDD" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#D89B3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F9FCFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#FFAA17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h1>RakshaConnect</h1>
         <p>Sensor-based accident detection.<br>Ek tap door apni suraksha.</p>
@@ -406,7 +414,7 @@
             <div class="ring-pulse"></div>
             <div class="ring-bg"></div>
             <div class="ring-icon">
-              <svg id="ringSvg" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F2ECDD" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 13.5l2.2 2.2L16 10" stroke="#D89B3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg id="ringSvg" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F9FCFF" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 13.5l2.2 2.2L16 10" stroke="#FFAA17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
           <div class="ring-state">
