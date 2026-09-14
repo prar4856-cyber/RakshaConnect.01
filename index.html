@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>RakshaConnect — Accident Alert</title>
+<title>RakshaConnect — Accident Alert + Live Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap">
+<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root{
@@ -47,70 +48,195 @@
     --ink-soft:#9CA3B0;
     --line:#2A2E3A;
   }
-  body.dark-mode .shell { box-shadow: 0 0 60px -20px rgba(0,0,0,.6); }
-  body.dark-mode .brand-mark { background: linear-gradient(155deg, #2A2F40, #1A1D26); }
-  body.dark-mode .ring-bg { background: radial-gradient(circle at 50% 40%, #2B3245, #0F1116); }
-  body.dark-mode .topbar { background: #0F1116; }
-  body.dark-mode .bottomnav { background: #1A1D26; }
-  body.dark-mode .btn-ghost { color: #E8EAF0; border-color: #2A2E3A; }
-  body.dark-mode .btn-ghost:hover { background: #252932; }
-  body.dark-mode .icon-btn { background: #252932; color: #E8EAF0; }
-  body.dark-mode .search-bar { background: #1A1D26; border-color: #2A2E3A; }
-  body.dark-mode .search-bar input { color: #E8EAF0; }
+  body.dark-mode .shell {
+    box-shadow: 0 0 60px -20px rgba(0,0,0,.6);
+  }
+  body.dark-mode .brand-mark {
+    background: linear-gradient(155deg, #2A2F40, #1A1D26);
+  }
+  body.dark-mode .ring-bg {
+    background: radial-gradient(circle at 50% 40%, #2B3245, #0F1116);
+  }
+  body.dark-mode .topbar {
+    background: #0F1116;
+  }
+  body.dark-mode .bottomnav {
+    background: #1A1D26;
+  }
+  body.dark-mode .btn-ghost {
+    color: #E8EAF0;
+    border-color: #2A2E3A;
+  }
+  body.dark-mode .btn-ghost:hover {
+    background: #252932;
+  }
+  body.dark-mode .icon-btn {
+    background: #252932;
+    color: #E8EAF0;
+  }
+  body.dark-mode .search-bar {
+    background: #1A1D26;
+    border-color: #2A2E3A;
+  }
+  body.dark-mode .search-bar input {
+    color: #E8EAF0;
+  }
   body.dark-mode .field input,
   body.dark-mode .field select,
-  body.dark-mode .field textarea { background: #1A1D26; border-color: #2A2E3A; color: #E8EAF0; }
+  body.dark-mode .field textarea {
+    background: #1A1D26;
+    border-color: #2A2E3A;
+    color: #E8EAF0;
+  }
   body.dark-mode .field input:focus,
   body.dark-mode .field select:focus,
-  body.dark-mode .field textarea:focus { border-color: #E8EAF0; box-shadow: 0 0 0 3px rgba(232,234,240,.1); }
+  body.dark-mode .field textarea:focus {
+    border-color: #E8EAF0;
+    box-shadow: 0 0 0 3px rgba(232,234,240,.1);
+  }
   body.dark-mode .user-row,
   body.dark-mode .alert-card,
   body.dark-mode .map-card,
   body.dark-mode .how-card,
-  body.dark-mode .signal-chip { background: #1A1D26; border-color: #2A2E3A; }
-  body.dark-mode .signal-chip.tripped { background: #3D1520; border-color: #FF4D73; }
-  body.dark-mode .alert-card { border-left-color: #FF4D73; }
+  body.dark-mode .signal-chip {
+    background: #1A1D26;
+    border-color: #2A2E3A;
+  }
+  body.dark-mode .signal-chip.tripped {
+    background: #3D1520;
+    border-color: #FF4D73;
+  }
+  body.dark-mode .alert-card {
+    border-left-color: #FF4D73;
+  }
   body.dark-mode .modal-card,
-  body.dark-mode .sheet { background: #1A1D26; color: #E8EAF0; }
+  body.dark-mode .sheet {
+    background: #1A1D26;
+    color: #E8EAF0;
+  }
   body.dark-mode .modal-card h3,
   body.dark-mode .who-name,
   body.dark-mode .ring-state .label,
-  body.dark-mode .section-title { color: #E8EAF0; }
-  body.dark-mode .tab-btn { background: #1A1D26; border-color: #2A2E3A; color: #9CA3B0; }
-  body.dark-mode .tab-btn.active { background: #E8EAF0; border-color: #E8EAF0; color: #1A1D26; }
-  body.dark-mode .segmented { background: #252932; }
-  body.dark-mode .seg-btn { color: #9CA3B0; }
-  body.dark-mode .seg-btn.active { background: #E8EAF0; color: #1A1D26; }
-  body.dark-mode .toggle { background: #2A2E3A; }
-  body.dark-mode .toggle.on { background: #E8EAF0; }
-  body.dark-mode .toggle.on .knob { background: #1A1D26; }
-  body.dark-mode .toggle .knob { background: #6B7280; }
-  body.dark-mode .perm-banner { background: #3D2E0F; border-color: #FFB83D; color: #FFB83D; }
-  body.dark-mode .ring-wrap.tripped .ring-bg { background: radial-gradient(circle at 50% 40%, #7A1030, #FF4D73); }
-  body.dark-mode .call-chip { background: #252932; color: #E8EAF0; }
-  body.dark-mode .call-chip.danger { background: #3D1520; color: #FF4D73; }
-  body.dark-mode .toast { background: #F0F2F8; color: #12151F; }
-  body.dark-mode .toast.danger { background: #FF4D73; color: #fff; }
-  body.dark-mode .empty-state { color: #9CA3B0; }
-  body.dark-mode .map-container { background: #12151F; }
-  body.dark-mode .leaflet-tile { filter: brightness(0.8) contrast(1.1) saturate(0.8); }
-  body.dark-mode .leaflet-popup-content-wrapper { background: #1A1D26; color: #E8EAF0; }
-  body.dark-mode .leaflet-popup-tip { background: #1A1D26; }
-  body.dark-mode .link-btn { color: #FFB83D; }
-  body.dark-mode .a-name { color: #E8EAF0; }
-  body.dark-mode .a-msg { color: #9CA3B0; }
-  body.dark-mode .a-time { color: #6B7280; }
-  body.dark-mode .a-location { color: #FFB83D; }
-  body.dark-mode .a-location-missing { color: #6B7280; }
-  body.dark-mode .u-name { color: #E8EAF0; }
-  body.dark-mode .u-username { color: #6B7280; }
-  body.dark-mode .fav-chip .fname { color: #E8EAF0; }
-  body.dark-mode .who-sub { color: #9CA3B0; }
-  body.dark-mode .ring-state .sub { color: #9CA3B0; }
-  body.dark-mode .how-list li { color: #9CA3B0; }
-  body.dark-mode .cd-sub { color: #D8D2C4; }
-  body.dark-mode .map-status { color: #9CA3B0; }
-  body.dark-mode .brand p { color: #9CA3B0; }
+  body.dark-mode .section-title {
+    color: #E8EAF0;
+  }
+  body.dark-mode .tab-btn {
+    background: #1A1D26;
+    border-color: #2A2E3A;
+    color: #9CA3B0;
+  }
+  body.dark-mode .tab-btn.active {
+    background: #E8EAF0;
+    border-color: #E8EAF0;
+    color: #1A1D26;
+  }
+  body.dark-mode .segmented {
+    background: #252932;
+  }
+  body.dark-mode .seg-btn {
+    color: #9CA3B0;
+  }
+  body.dark-mode .seg-btn.active {
+    background: #E8EAF0;
+    color: #1A1D26;
+  }
+  body.dark-mode .toggle {
+    background: #2A2E3A;
+  }
+  body.dark-mode .toggle.on {
+    background: #E8EAF0;
+  }
+  body.dark-mode .toggle.on .knob {
+    background: #1A1D26;
+  }
+  body.dark-mode .toggle .knob {
+    background: #6B7280;
+  }
+  body.dark-mode .perm-banner {
+    background: #3D2E0F;
+    border-color: #FFB83D;
+    color: #FFB83D;
+  }
+  body.dark-mode .ring-wrap.tripped .ring-bg {
+    background: radial-gradient(circle at 50% 40%, #7A1030, #FF4D73);
+  }
+  body.dark-mode .call-chip {
+    background: #252932;
+    color: #E8EAF0;
+  }
+  body.dark-mode .call-chip.danger {
+    background: #3D1520;
+    color: #FF4D73;
+  }
+  body.dark-mode .toast {
+    background: #F0F2F8;
+    color: #12151F;
+  }
+  body.dark-mode .toast.danger {
+    background: #FF4D73;
+    color: #fff;
+  }
+  body.dark-mode .empty-state {
+    color: #9CA3B0;
+  }
+  body.dark-mode .map-container {
+    background: #12151F;
+  }
+  body.dark-mode .leaflet-tile {
+    filter: brightness(0.8) contrast(1.1) saturate(0.8);
+  }
+  body.dark-mode .leaflet-popup-content-wrapper {
+    background: #1A1D26;
+    color: #E8EAF0;
+  }
+  body.dark-mode .leaflet-popup-tip {
+    background: #1A1D26;
+  }
+  body.dark-mode .link-btn {
+    color: #FFB83D;
+  }
+  body.dark-mode .a-name {
+    color: #E8EAF0;
+  }
+  body.dark-mode .a-msg {
+    color: #9CA3B0;
+  }
+  body.dark-mode .a-time {
+    color: #6B7280;
+  }
+  body.dark-mode .a-location {
+    color: #FFB83D;
+  }
+  body.dark-mode .a-location-missing {
+    color: #6B7280;
+  }
+  body.dark-mode .u-name {
+    color: #E8EAF0;
+  }
+  body.dark-mode .u-username {
+    color: #6B7280;
+  }
+  body.dark-mode .fav-chip .fname {
+    color: #E8EAF0;
+  }
+  body.dark-mode .who-sub {
+    color: #9CA3B0;
+  }
+  body.dark-mode .ring-state .sub {
+    color: #9CA3B0;
+  }
+  body.dark-mode .how-list li {
+    color: #9CA3B0;
+  }
+  body.dark-mode .cd-sub {
+    color: #D8D2C4;
+  }
+  body.dark-mode .map-status {
+    color: #9CA3B0;
+  }
+  body.dark-mode .brand p {
+    color: #9CA3B0;
+  }
 
   /* ===== LANGUAGE FONT SWITCHING ===== */
   body.lang-hi {
@@ -153,268 +279,66 @@
   ::-webkit-scrollbar-thumb{ background:#c4c7ce; border-radius:99px; }
   body.dark-mode ::-webkit-scrollbar-thumb{ background:#3A3F4A; }
 
-  /* ============================================================
-     GITHUB-STYLE AUTH PAGE
-  ============================================================ */
-  #view-auth {
-    background: var(--backdrop);
-    justify-content: center;
-    align-items: center;
-    padding: 32px 16px;
+  /* ---------- Auth ---------- */
+  .auth-wrap{
+    padding:56px 40px 40px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    flex:1;
+    max-width:520px;
+    width:100%;
+    margin:0 auto;
   }
-  .auth-github-wrap {
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+  .brand{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:4px; }
+  .brand-mark{
+    width:64px; height:64px; border-radius:20px;
+    background:linear-gradient(155deg,var(--teal),var(--teal-deep));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 22px -8px rgba(18,21,31,.55);
   }
-  .gh-brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-    text-align: center;
-  }
-  .gh-brand-mark {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(155deg, var(--teal), var(--teal-deep));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 20px -8px rgba(18,21,31,.5);
-  }
-  body.dark-mode .gh-brand-mark {
-    background: linear-gradient(155deg, #2A2F40, #1A1D26);
-  }
-  .gh-brand-mark svg { width: 32px; height: 32px; }
-  .gh-brand h1 {
-    font-family: var(--font-head);
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: .02em;
-    text-transform: uppercase;
-    color: var(--teal-deep);
-    margin: 0;
-  }
-  .gh-brand p {
-    margin: 0;
-    font-size: 13px;
-    color: var(--ink-soft);
-    line-height: 1.4;
-    max-width: 340px;
-  }
+  .brand-mark svg{ width:34px; height:34px; }
+  .brand h1{ font-family:var(--font-head); font-size:26px; font-weight:600; margin:0; letter-spacing:.02em; text-transform:uppercase; color:var(--teal-deep); }
+  .brand p{ margin:0; font-size:13px; color:var(--ink-soft); text-align:center; line-height:1.4; }
 
-  /* Top segmented control (Login / Signup) — GitHub-like tabs */
-  .gh-tabs {
-    display: flex;
-    width: 100%;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 4px;
-    gap: 4px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  .segmented{
+    display:flex; background:var(--teal-soft); border-radius:999px; padding:4px; gap:4px;
   }
-  .gh-tab {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 8px 0;
-    border-radius: 7px;
-    font-family: var(--font-head);
-    font-weight: 500;
-    font-size: 13px;
-    letter-spacing: .03em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    cursor: pointer;
-    transition: .15s;
+  .seg-btn{
+    flex:1; border:none; background:transparent; padding:10px 0; border-radius:999px;
+    font-family:var(--font-head); font-weight:500; font-size:14px; letter-spacing:.03em; text-transform:uppercase;
+    color:var(--teal-deep); cursor:pointer; transition:.2s;
   }
-  .gh-tab.active {
-    background: var(--teal-soft);
-    color: var(--teal-deep);
-  }
-  body.dark-mode .gh-tab.active {
-    background: #252932;
-    color: #E8EAF0;
-  }
+  .seg-btn.active{ background:var(--teal); color:#fff; box-shadow:0 6px 14px -6px rgba(18,21,31,.5); }
+  body.dark-mode .seg-btn.active{ background:var(--teal); color:var(--teal-deep); }
 
-  /* Main GitHub-style card */
-  .gh-card {
-    width: 100%;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 22px 22px 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.06);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  .auth-form{ display:flex; flex-direction:column; gap:12px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:12px; font-weight:600; color:var(--ink-soft); }
+  .field input, .field select, .field textarea{
+    border:1.5px solid var(--line); background:var(--paper); border-radius:var(--radius-sm);
+    padding:11px 13px; font-size:14.5px; color:var(--ink); outline:none; transition:.15s;
   }
-  body.dark-mode .gh-card {
-    box-shadow: 0 1px 3px rgba(0,0,0,.4);
-  }
+  .field textarea{ resize:vertical; min-height:56px; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--teal); box-shadow:0 0 0 3px rgba(27,32,50,.16); }
+  .field-row{ display:flex; gap:10px; }
+  .field-row .field{ flex:1; }
 
-  .gh-card .gh-title {
-    font-family: var(--font-head);
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--teal-deep);
-    text-align: center;
-    letter-spacing: .01em;
-    margin-bottom: 2px;
+  .btn{
+    border:none; border-radius:var(--radius-sm); padding:13px 16px;
+    font-family:var(--font-head); font-weight:500; font-size:14.5px; letter-spacing:.03em; text-transform:uppercase;
+    cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center; gap:8px;
   }
-  .gh-card .gh-subtitle {
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    text-align: center;
-    margin: -6px 0 4px;
-    line-height: 1.4;
-  }
-
-  .gh-form { display: flex; flex-direction: column; gap: 14px; }
-
-  .gh-field { display: flex; flex-direction: column; gap: 6px; }
-  .gh-field label {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--ink);
-    text-align: left;
-  }
-  .gh-field input,
-  .gh-field select,
-  .gh-field textarea {
-    width: 100%;
-    border: 1px solid var(--line);
-    background: var(--paper);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-    transition: .15s;
-  }
-  .gh-field textarea { resize: vertical; min-height: 52px; }
-  .gh-field input:focus,
-  .gh-field select:focus,
-  .gh-field textarea:focus {
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(27,32,50,.12);
-  }
-  body.dark-mode .gh-field input:focus,
-  body.dark-mode .gh-field select:focus,
-  body.dark-mode .gh-field textarea:focus {
-    border-color: #E8EAF0;
-    box-shadow: 0 0 0 3px rgba(232,234,240,.12);
-  }
-
-  .gh-row { display: flex; gap: 10px; }
-  .gh-row .gh-field { flex: 1; }
-
-  .gh-btn {
-    border: none;
-    border-radius: 8px;
-    padding: 11px 16px;
-    font-family: var(--font-head);
-    font-weight: 500;
-    font-size: 14px;
-    letter-spacing: .03em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: .15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .gh-btn:active { transform: scale(.98); }
-  .gh-btn-primary {
-    background: #2DA44E;
-    color: #fff;
-    box-shadow: 0 2px 4px rgba(45,164,78,.3);
-  }
-  .gh-btn-primary:hover { background: #2C974B; }
-  body.dark-mode .gh-btn-primary {
-    background: #238636;
-  }
-  body.dark-mode .gh-btn-primary:hover { background: #2EA043; }
-
-  .gh-btn-block { width: 100%; }
-
-  /* GitHub-style footer links */
-  .gh-links {
-    text-align: center;
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
-  .gh-links a,
-  .gh-links button {
-    color: #0969DA;
-    text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 12.5px;
-    font-family: inherit;
-    padding: 0;
-  }
-  .gh-links a:hover,
-  .gh-links button:hover { text-decoration: underline; }
-  body.dark-mode .gh-links a,
-  body.dark-mode .gh-links button { color: #58A6FF; }
-
-  /* Signup card — scrollable if long */
-  .gh-card-scroll {
-    max-height: 70vh;
-    overflow-y: auto;
-    padding-right: 8px;
-  }
-  .gh-card-scroll::-webkit-scrollbar { width: 6px; }
-  .gh-card-scroll::-webkit-scrollbar-thumb {
-    background: #c4c7ce;
-    border-radius: 99px;
-  }
-  body.dark-mode .gh-card-scroll::-webkit-scrollbar-thumb {
-    background: #3A3F4A;
-  }
-
-  /* Language & theme toggle inside auth page */
-  .auth-toggles {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 6px;
-  }
-  .auth-toggle-btn {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--ink);
-    cursor: pointer;
-    transition: .15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .auth-toggle-btn:hover {
-    background: var(--teal-soft);
-  }
-  body.dark-mode .auth-toggle-btn {
-    background: #1A1D26;
-    color: #E8EAF0;
-    border-color: #2A2E3A;
-  }
-  body.dark-mode .auth-toggle-btn:hover {
-    background: #252932;
+  .btn:active{ transform:scale(.98); }
+  .btn-primary{ background:var(--teal); color:#fff; box-shadow:0 8px 18px -8px rgba(18,21,31,.55); }
+  body.dark-mode .btn-primary{ background:var(--teal); color:var(--teal-deep); }
+  .btn-danger{ background:var(--brick); color:#fff; box-shadow:0 8px 18px -8px rgba(245,50,92,.45); }
+  .btn-amber{ background:var(--amber); color:var(--teal-deep); box-shadow:0 8px 18px -8px rgba(255,170,23,.5); }
+  .btn-ghost{ background:transparent; color:var(--teal-deep); border:1.5px solid var(--line); }
+  .btn-block{ width:100%; }
+  .link-btn{
+    background:none; border:none; color:var(--amber); font-family:var(--font-head); font-weight:500; font-size:13px; cursor:pointer;
+    padding:2px; text-align:center; text-decoration:underline; text-underline-offset:3px; letter-spacing:.01em;
   }
 
   /* ---------- Modal / overlays ---------- */
@@ -596,6 +520,7 @@
   .call-chip svg{ width:14px; height:14px; }
   .call-chip.danger{ background:var(--brick-soft); color:var(--brick); }
 
+  /* ---------- MAP CARD ---------- */
   .map-card {
     background: var(--paper);
     border: 1.5px solid var(--line);
@@ -615,7 +540,10 @@
     gap: 8px;
   }
   .map-header .section-title { font-size: 14px; }
-  .map-actions { display: flex; gap: 8px; }
+  .map-actions {
+    display: flex;
+    gap: 8px;
+  }
   .map-btn {
     background: var(--teal-soft);
     border: none;
@@ -686,18 +614,17 @@
 
   /* ---------- Mobile tweaks ---------- */
   @media (max-width:640px){
+    .auth-wrap{ padding:32px 20px 24px; }
     .page{ padding:20px 18px 32px; }
     .topbar{ padding:16px 18px 12px; }
     .ring-wrap{ width:180px; height:180px; }
     .ring-icon svg{ width:64px; height:64px; }
     .cd-num{ width:130px; height:130px; font-size:46px; }
     .field-row{ flex-direction:column; gap:12px; }
+    .profile-section{ padding:24px 18px; }
     .map-container { height: 180px; }
     .topbar-actions{ gap:4px; }
     .icon-btn{ width:34px; height:34px; }
-    #view-auth { padding: 20px 14px; }
-    .gh-card { padding: 18px 16px 20px; }
-    .gh-row { flex-direction: column; gap: 12px; }
   }
 </style>
 </head>
@@ -705,123 +632,53 @@
 
 <div class="shell" id="shell">
 
-  <!-- ================= AUTH VIEW (GitHub-style) ================= -->
+  <!-- ================= AUTH VIEW ================= -->
   <section id="view-auth" class="view">
-    <div class="auth-github-wrap">
-
-      <!-- Brand -->
-      <div class="gh-brand">
-        <div class="gh-brand-mark">
+    <div class="auth-wrap">
+      <div class="brand">
+        <div class="brand-mark">
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F9FCFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#FFAA17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h1>RakshaConnect</h1>
         <p data-i18n="tagline">Sensor-based accident detection.<br>Ek tap door apni suraksha.</p>
       </div>
 
-      <!-- Segmented Login / Signup -->
-      <div class="gh-tabs" id="authSegment">
-        <button class="gh-tab active" data-mode="login" type="button" data-i18n="login">Login</button>
-        <button class="gh-tab" data-mode="signup" type="button" data-i18n="signup">Signup</button>
+      <div class="segmented" id="authSegment">
+        <button class="seg-btn active" data-mode="login" type="button" data-i18n="login">Login</button>
+        <button class="seg-btn" data-mode="signup" type="button" data-i18n="signup">Signup</button>
       </div>
 
-      <!-- LOGIN CARD -->
-      <form id="loginForm" class="gh-card gh-form">
-        <div class="gh-title" data-i18n="loginTitle">Sign in to RakshaConnect</div>
-        <div class="gh-subtitle" data-i18n="loginSubtitle">Apne account me login karein</div>
-
-        <div class="gh-field">
-          <label data-i18n="username">Username</label>
-          <input type="text" id="loginUsername" autocomplete="username" required>
-        </div>
-        <div class="gh-field">
-          <label data-i18n="password">Password</label>
-          <input type="password" id="loginPassword" autocomplete="current-password" required>
-        </div>
-
-        <button class="gh-btn gh-btn-primary gh-btn-block" type="submit" data-i18n="loginBtn">Sign in</button>
-
-        <div class="gh-links">
-          <button type="button" id="openForgot" data-i18n="forgot">Password bhool gaye?</button>
-          &nbsp;·&nbsp;
-          <button type="button" id="goSignupLink" data-i18n="createAccount">Naya account banayein</button>
-        </div>
+      <form id="loginForm" class="auth-form">
+        <div class="field"><label data-i18n="username">Username</label><input type="text" id="loginUsername" autocomplete="username" required></div>
+        <div class="field"><label data-i18n="password">Password</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="loginBtn">Login karein</button>
+        <button class="link-btn" type="button" id="openForgot" data-i18n="forgot">Password bhool gaye?</button>
       </form>
 
-      <!-- SIGNUP CARD -->
-      <form id="signupForm" class="gh-card gh-form hidden">
-        <div class="gh-title" data-i18n="signupTitle">Create your account</div>
-        <div class="gh-subtitle" data-i18n="signupSubtitle">RakshaConnect join karein</div>
-
-        <div class="gh-row">
-          <div class="gh-field">
-            <label data-i18n="username">Username</label>
-            <input type="text" id="suUsername" required>
-          </div>
-          <div class="gh-field">
-            <label data-i18n="name">Naam</label>
-            <input type="text" id="suName" required>
-          </div>
+      <form id="signupForm" class="auth-form hidden">
+        <div class="field-row">
+          <div class="field"><label data-i18n="username">Username</label><input type="text" id="suUsername" required></div>
+          <div class="field"><label data-i18n="name">Naam</label><input type="text" id="suName" required></div>
         </div>
-
-        <div class="gh-row">
-          <div class="gh-field">
-            <label data-i18n="password">Password</label>
-            <input type="password" id="suPassword" required minlength="6">
-          </div>
-          <div class="gh-field">
-            <label data-i18n="bloodGroup">Blood Group</label>
+        <div class="field-row">
+          <div class="field"><label data-i18n="password">Password</label><input type="password" id="suPassword" required minlength="6"></div>
+          <div class="field"><label data-i18n="bloodGroup">Blood Group</label>
             <select id="suBlood">
               <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
               <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
             </select>
           </div>
         </div>
-
-        <div class="gh-row">
-          <div class="gh-field">
-            <label data-i18n="phone">Phone</label>
-            <input type="tel" id="suPhone">
-          </div>
-          <div class="gh-field">
-            <label data-i18n="familyPhone">Family ka phone</label>
-            <input type="tel" id="suFamPhone">
-          </div>
+        <div class="field-row">
+          <div class="field"><label data-i18n="phone">Phone</label><input type="tel" id="suPhone"></div>
+          <div class="field"><label data-i18n="familyPhone">Family ka phone</label><input type="tel" id="suFamPhone"></div>
         </div>
-
-        <div class="gh-field">
-          <label data-i18n="address">Address</label>
-          <input type="text" id="suAddress">
-        </div>
-
-        <div class="gh-field">
-          <label data-i18n="conditions">Medical conditions (agar ho)</label>
-          <textarea id="suConditions" data-i18n-placeholder="conditionsPlaceholder" placeholder="Jaise — diabetes, allergy..."></textarea>
-        </div>
-
-        <div class="gh-field">
-          <label data-i18n="secQ">Security sawaal (password recovery ke liye)</label>
-          <input type="text" id="suSecQ" data-i18n-placeholder="secQPlaceholder" placeholder="Jaise — aapke pehle pet ka naam?" required>
-        </div>
-
-        <div class="gh-field">
-          <label data-i18n="secA">Security jawaab</label>
-          <input type="text" id="suSecA" required>
-        </div>
-
-        <button class="gh-btn gh-btn-primary gh-btn-block" type="submit" data-i18n="signupBtn">Create account</button>
-
-        <div class="gh-links">
-          <span data-i18n="alreadyAccount">Pehle se account hai?</span>
-          &nbsp;<button type="button" id="goLoginLink" data-i18n="signInLink">Sign in karein</button>
-        </div>
+        <div class="field"><label data-i18n="address">Address</label><input type="text" id="suAddress"></div>
+        <div class="field"><label data-i18n="conditions">Medical conditions (agar ho)</label><textarea id="suConditions" data-i18n-placeholder="conditionsPlaceholder" placeholder="Jaise — diabetes, allergy..."></textarea></div>
+        <div class="field"><label data-i18n="secQ">Security sawaal (password recovery ke liye)</label><input type="text" id="suSecQ" data-i18n-placeholder="secQPlaceholder" placeholder="Jaise — aapke pehle pet ka naam?" required></div>
+        <div class="field"><label data-i18n="secA">Security jawaab</label><input type="text" id="suSecA" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="signupBtn">Account banayein</button>
       </form>
-
-      <!-- Auth page toggles -->
-      <div class="auth-toggles">
-        <button class="auth-toggle-btn" id="authLangBtn" type="button">🌐 <span data-i18n="language">Hindi</span></button>
-        <button class="auth-toggle-btn" id="authDarkBtn" type="button">🌙 <span data-i18n="theme">Light</span></button>
-      </div>
-
     </div>
   </section>
 
@@ -972,7 +829,7 @@
           <button class="btn btn-primary btn-block" type="submit" data-i18n="save">Save karein</button>
         </form>
 
-        <!-- MAP CARD -->
+        <!-- ===== MAP CARD ===== -->
         <div class="map-card" id="liveMapCard">
           <div class="map-header">
             <p class="section-title" data-i18n="liveLocation">📍 Live Location</p>
@@ -1048,6 +905,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
@@ -1070,18 +928,10 @@ const I18N = {
     tagline: "Sensor-based accident detection.<br>Ek tap door apni suraksha.",
     login: "लॉगिन",
     signup: "साइनअप",
-    loginTitle: "RakshaConnect में साइन इन करें",
-    loginSubtitle: "अपने अकाउंट में लॉगिन करें",
-    signupTitle: "अपना अकाउंट बनाएँ",
-    signupSubtitle: "RakshaConnect से जुड़ें",
     username: "उपयोगकर्ता नाम",
     password: "पासवर्ड",
-    loginBtn: "साइन इन करें",
-    signupBtn: "अकाउंट बनाएँ",
+    loginBtn: "लॉगिन करें",
     forgot: "पासवर्ड भूल गए?",
-    createAccount: "नया अकाउंट बनाएँ",
-    alreadyAccount: "पहले से अकाउंट है?",
-    signInLink: "साइन इन करें",
     name: "नाम",
     bloodGroup: "ब्लड ग्रुप",
     phone: "फ़ोन",
@@ -1092,6 +942,7 @@ const I18N = {
     secQ: "सुरक्षा प्रश्न (पासवर्ड रिकवरी के लिए)",
     secQPlaceholder: "जैसे — आपके पहले पेट का नाम?",
     secA: "सुरक्षा उत्तर",
+    signupBtn: "अकाउंट बनाएँ",
     close: "बंद करें ✕",
     resetPassword: "पासवर्ड रीसेट करें",
     next: "आगे बढ़ें",
@@ -1138,26 +989,16 @@ const I18N = {
     accidentDetected: "दुर्घटना का पता चला है",
     countdownSub: "अगर आप ठीक हैं तो Cancel दबाएँ। नहीं तो इमरजेंसी अलर्ट अपने आप भेज दिया जाएगा।",
     cancelImOk: "Cancel करें — मैं ठीक हूँ",
-    sendEmergency: "इमरजेंसी अलर्ट भेजें",
-    language: "हिंदी",
-    theme: "लाइट"
+    sendEmergency: "इमरजेंसी अलर्ट भेजें"
   },
   en: {
     tagline: "Sensor-based accident detection.<br>One tap away from safety.",
     login: "Login",
     signup: "Signup",
-    loginTitle: "Sign in to RakshaConnect",
-    loginSubtitle: "Login to your account",
-    signupTitle: "Create your account",
-    signupSubtitle: "Join RakshaConnect",
     username: "Username",
     password: "Password",
-    loginBtn: "Sign in",
-    signupBtn: "Create account",
+    loginBtn: "Login",
     forgot: "Forgot password?",
-    createAccount: "Create an account",
-    alreadyAccount: "Already have an account?",
-    signInLink: "Sign in",
     name: "Name",
     bloodGroup: "Blood Group",
     phone: "Phone",
@@ -1168,6 +1009,7 @@ const I18N = {
     secQ: "Security question (for password recovery)",
     secQPlaceholder: "e.g. — name of your first pet?",
     secA: "Security answer",
+    signupBtn: "Create account",
     close: "Close ✕",
     resetPassword: "Reset password",
     next: "Next",
@@ -1214,9 +1056,7 @@ const I18N = {
     accidentDetected: "ACCIDENT DETECTED",
     countdownSub: "If you're okay, press Cancel. Otherwise an emergency alert will be sent automatically.",
     cancelImOk: "Cancel — I'm okay",
-    sendEmergency: "Send emergency alert",
-    language: "English",
-    theme: "Light"
+    sendEmergency: "Send emergency alert"
   }
 };
 
@@ -1240,20 +1080,13 @@ function applyLanguage(lang) {
       el.placeholder = I18N[lang][key];
     }
   });
-
-  // Update auth lang button label
-  const authLangBtn = document.getElementById('authLangBtn');
-  if (authLangBtn) {
-    const span = authLangBtn.querySelector('span');
-    if (span) span.textContent = I18N[lang].language;
-  }
-
   // Update map btn labels
   const centerBtn = document.getElementById('mapCenterBtn');
   const refreshBtn = document.getElementById('mapRefreshBtn');
   if (centerBtn) centerBtn.innerHTML = centerBtn.innerHTML.replace(/(Center|सेंटर)/, I18N[lang].center);
   if (refreshBtn) refreshBtn.innerHTML = refreshBtn.innerHTML.replace(/(Refresh|रिफ्रेश)/, I18N[lang].refresh);
 
+  // Update detector label if active
   if (detectionOn) {
     document.getElementById('ringLabel').textContent = I18N[lang].detectorOn;
     document.getElementById('ringSub').textContent = I18N[lang].detectorOnSub;
@@ -1275,15 +1108,10 @@ function applyDarkMode(on) {
   darkMode = on;
   document.body.classList.toggle('dark-mode', on);
   const btn = document.getElementById('darkToggleBtn');
-  const authBtn = document.getElementById('authDarkBtn');
   if (btn) btn.textContent = on ? '☀️' : '🌙';
-  if (authBtn) {
-    const span = authBtn.querySelector('span');
-    if (span) span.textContent = on ? (currentLang === 'hi' ? 'डार्क' : 'Dark') : I18N[currentLang].theme;
-    authBtn.firstChild.textContent = on ? '☀️ ' : '🌙 ';
-  }
   localStorage.setItem('rc_dark', on ? '1' : '0');
   if (map) {
+    // Refresh tiles for dark mode filter
     setTimeout(() => { if (map) map.invalidateSize(); }, 100);
   }
 }
@@ -1315,6 +1143,7 @@ const SPEED_DROP_THRESHOLD = 8;
 const MIN_SPEED_FOR_DROP = 5;
 const SIGNAL_HOLD_MS = 4000;
 
+/* ---------- MAP VARIABLES ---------- */
 let map = null;
 let marker = null;
 let mapInitDone = false;
@@ -1436,28 +1265,14 @@ function setMapLoading(text) {
 /* ============================================================
    AUTH VIEW WIRING
 ============================================================ */
-$all('#authSegment .gh-tab').forEach(btn=>{
+$all('#authSegment .seg-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    $all('#authSegment .gh-tab').forEach(b=>b.classList.remove('active'));
+    $all('#authSegment .seg-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     const mode = btn.dataset.mode;
     $('#loginForm').classList.toggle('hidden', mode!=='login');
     $('#signupForm').classList.toggle('hidden', mode!=='signup');
   });
-});
-
-// Links inside cards
-$('#goSignupLink').addEventListener('click', ()=>{
-  $all('#authSegment .gh-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelector('#authSegment [data-mode="signup"]').classList.add('active');
-  $('#loginForm').classList.add('hidden');
-  $('#signupForm').classList.remove('hidden');
-});
-$('#goLoginLink').addEventListener('click', ()=>{
-  $all('#authSegment .gh-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelector('#authSegment [data-mode="login"]').classList.add('active');
-  $('#signupForm').classList.add('hidden');
-  $('#loginForm').classList.remove('hidden');
 });
 
 $('#loginForm').addEventListener('submit', async (e)=>{
@@ -1497,7 +1312,7 @@ $('#signupForm').addEventListener('submit', async (e)=>{
   let session = data.session;
   if(!session){
     const { data:d2, error:e2 } = await supa.auth.signInWithPassword({ email, password: fields.password });
-    if(e2 || !d2.session){ toast(currentLang === 'hi' ? 'अकाउंट बन गया। अब लॉगिन करें।' : 'Account created. Please login.'); $('#goLoginLink').click(); return; }
+    if(e2 || !d2.session){ toast(currentLang === 'hi' ? 'अकाउंट बन गया। अब लॉगिन करें।' : 'Account created. Please login.'); $('#authSegment [data-mode="login"]').click(); return; }
     session = d2.session;
   }
   const uid = session.user.id;
@@ -2076,19 +1891,9 @@ $('#profileForm').addEventListener('submit', async (e)=>{
 ============================================================ */
 $('#langToggleBtn').addEventListener('click', ()=>{
   applyLanguage(currentLang === 'hi' ? 'en' : 'hi');
-  if (darkMode) applyDarkMode(true); // refresh theme label
 });
 
 $('#darkToggleBtn').addEventListener('click', ()=>{
-  applyDarkMode(!darkMode);
-});
-
-// Auth page toggles
-$('#authLangBtn').addEventListener('click', ()=>{
-  applyLanguage(currentLang === 'hi' ? 'en' : 'hi');
-  if (darkMode) applyDarkMode(true);
-});
-$('#authDarkBtn').addEventListener('click', ()=>{
   applyDarkMode(!darkMode);
 });
 
@@ -2096,6 +1901,7 @@ $('#authDarkBtn').addEventListener('click', ()=>{
    BOOT
 ============================================================ */
 (async function boot(){
+  // Load preferences
   const savedLang = localStorage.getItem('rc_lang') || 'hi';
   applyLanguage(savedLang);
   const savedDark = localStorage.getItem('rc_dark') === '1';
@@ -2108,4 +1914,4 @@ $('#authDarkBtn').addEventListener('click', ()=>{
 })();
 </script>
 </body>
-</html>
+  </html>
