@@ -8,31 +8,29 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap">
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root{
-    --cream:#F9FCFF;
-    --backdrop:#E9ECF1;
+    --cream:#FFFFFF;
+    --backdrop:#F4F6F9;
     --paper:#FFFFFF;
-    --teal:#1B2032;
-    --teal-deep:#12151F;
-    --teal-soft:#E7E8ED;
+    --teal:#0F1523;
+    --teal-deep:#0A0E18;
+    --teal-soft:#EDEFF3;
     --brick:#F5325C;
     --brick-soft:#FDE1E8;
-    --amber:#FFAA17;
-    --amber-soft:#FFF1D9;
+    --amber:#FF7A00;
+    --amber-soft:#FFF1E0;
     --ink:#232A34;
-    --ink-soft:#747474;
-    --line:#E5E5E8;
+    --ink-soft:#6B7280;
+    --line:#E5E7EB;
     --font-body:'Poppins', 'Noto Sans Devanagari', sans-serif;
-    --font-head:'Oswald', 'Noto Sans Devanagari', sans-serif;
+    --font-head:'Poppins', 'Noto Sans Devanagari', sans-serif;
     --radius-lg:22px;
     --radius-md:16px;
     --radius-sm:11px;
   }
 
-  /* ===== DARK MODE ===== */
   body.dark-mode {
     --cream:#0F1116;
     --backdrop:#06080C;
@@ -42,210 +40,66 @@
     --teal-soft:#252932;
     --brick:#FF4D73;
     --brick-soft:#3D1520;
-    --amber:#FFB83D;
+    --amber:#FFA033;
     --amber-soft:#3D2E0F;
     --ink:#E8EAF0;
     --ink-soft:#9CA3B0;
     --line:#2A2E3A;
   }
-  body.dark-mode .shell {
-    box-shadow: 0 0 60px -20px rgba(0,0,0,.6);
-  }
-  body.dark-mode .brand-mark {
-    background: linear-gradient(155deg, #2A2F40, #1A1D26);
-  }
-  body.dark-mode .ring-bg {
-    background: radial-gradient(circle at 50% 40%, #2B3245, #0F1116);
-  }
-  body.dark-mode .topbar {
-    background: #0F1116;
-  }
-  body.dark-mode .bottomnav {
-    background: #1A1D26;
-  }
-  body.dark-mode .btn-ghost {
-    color: #E8EAF0;
-    border-color: #2A2E3A;
-  }
-  body.dark-mode .btn-ghost:hover {
-    background: #252932;
-  }
-  body.dark-mode .icon-btn {
-    background: #252932;
-    color: #E8EAF0;
-  }
-  body.dark-mode .search-bar {
-    background: #1A1D26;
-    border-color: #2A2E3A;
-  }
-  body.dark-mode .search-bar input {
-    color: #E8EAF0;
-  }
+  body.dark-mode .site-header { background: #0F1116; }
+  body.dark-mode .card-dark { background: #252932; }
+  body.dark-mode .btn-ghost { color: #E8EAF0; border-color: #2A2E3A; }
+  body.dark-mode .btn-ghost:hover { background: #252932; }
+  body.dark-mode .icon-btn { background: #252932; color: #E8EAF0; }
+  body.dark-mode .search-bar { background: #1A1D26; border-color: #2A2E3A; }
+  body.dark-mode .search-bar input { color: #E8EAF0; }
   body.dark-mode .field input,
   body.dark-mode .field select,
   body.dark-mode .field textarea {
-    background: #1A1D26;
-    border-color: #2A2E3A;
-    color: #E8EAF0;
+    background: #1A1D26; border-color: #2A2E3A; color: #E8EAF0;
   }
   body.dark-mode .field input:focus,
   body.dark-mode .field select:focus,
   body.dark-mode .field textarea:focus {
-    border-color: #E8EAF0;
-    box-shadow: 0 0 0 3px rgba(232,234,240,.1);
+    border-color: #E8EAF0; box-shadow: 0 0 0 3px rgba(232,234,240,.1);
   }
   body.dark-mode .user-row,
   body.dark-mode .alert-card,
-  body.dark-mode .map-card,
-  body.dark-mode .how-card,
-  body.dark-mode .signal-chip {
-    background: #1A1D26;
-    border-color: #2A2E3A;
-  }
-  body.dark-mode .signal-chip.tripped {
-    background: #3D1520;
-    border-color: #FF4D73;
-  }
-  body.dark-mode .alert-card {
-    border-left-color: #FF4D73;
+  body.dark-mode .how-card {
+    background: #1A1D26; border-color: #2A2E3A;
   }
   body.dark-mode .modal-card,
-  body.dark-mode .sheet {
-    background: #1A1D26;
-    color: #E8EAF0;
-  }
+  body.dark-mode .sheet { background: #1A1D26; color: #E8EAF0; }
   body.dark-mode .modal-card h3,
   body.dark-mode .who-name,
   body.dark-mode .ring-state .label,
-  body.dark-mode .section-title {
-    color: #E8EAF0;
-  }
-  body.dark-mode .tab-btn {
-    background: #1A1D26;
-    border-color: #2A2E3A;
-    color: #9CA3B0;
-  }
-  body.dark-mode .tab-btn.active {
-    background: #E8EAF0;
-    border-color: #E8EAF0;
-    color: #1A1D26;
-  }
-  body.dark-mode .segmented {
-    background: #252932;
-  }
-  body.dark-mode .seg-btn {
-    color: #9CA3B0;
-  }
-  body.dark-mode .seg-btn.active {
-    background: #E8EAF0;
-    color: #1A1D26;
-  }
-  body.dark-mode .toggle {
-    background: #2A2E3A;
-  }
-  body.dark-mode .toggle.on {
-    background: #E8EAF0;
-  }
-  body.dark-mode .toggle.on .knob {
-    background: #1A1D26;
-  }
-  body.dark-mode .toggle .knob {
-    background: #6B7280;
-  }
-  body.dark-mode .perm-banner {
-    background: #3D2E0F;
-    border-color: #FFB83D;
-    color: #FFB83D;
-  }
-  body.dark-mode .ring-wrap.tripped .ring-bg {
-    background: radial-gradient(circle at 50% 40%, #7A1030, #FF4D73);
-  }
-  body.dark-mode .call-chip {
-    background: #252932;
-    color: #E8EAF0;
-  }
-  body.dark-mode .call-chip.danger {
-    background: #3D1520;
-    color: #FF4D73;
-  }
-  body.dark-mode .toast {
-    background: #F0F2F8;
-    color: #12151F;
-  }
-  body.dark-mode .toast.danger {
-    background: #FF4D73;
-    color: #fff;
-  }
-  body.dark-mode .empty-state {
-    color: #9CA3B0;
-  }
-  body.dark-mode .map-container {
-    background: #12151F;
-  }
-  body.dark-mode .leaflet-tile {
-    filter: brightness(0.8) contrast(1.1) saturate(0.8);
-  }
-  body.dark-mode .leaflet-popup-content-wrapper {
-    background: #1A1D26;
-    color: #E8EAF0;
-  }
-  body.dark-mode .leaflet-popup-tip {
-    background: #1A1D26;
-  }
-  body.dark-mode .link-btn {
-    color: #FFB83D;
-  }
-  body.dark-mode .a-name {
-    color: #E8EAF0;
-  }
-  body.dark-mode .a-msg {
-    color: #9CA3B0;
-  }
-  body.dark-mode .a-time {
-    color: #6B7280;
-  }
-  body.dark-mode .a-location {
-    color: #FFB83D;
-  }
-  body.dark-mode .a-location-missing {
-    color: #6B7280;
-  }
-  body.dark-mode .u-name {
-    color: #E8EAF0;
-  }
-  body.dark-mode .u-username {
-    color: #6B7280;
-  }
-  body.dark-mode .fav-chip .fname {
-    color: #E8EAF0;
-  }
-  body.dark-mode .who-sub {
-    color: #9CA3B0;
-  }
-  body.dark-mode .ring-state .sub {
-    color: #9CA3B0;
-  }
-  body.dark-mode .how-list li {
-    color: #9CA3B0;
-  }
-  body.dark-mode .cd-sub {
-    color: #D8D2C4;
-  }
-  body.dark-mode .map-status {
-    color: #9CA3B0;
-  }
-  body.dark-mode .brand p {
-    color: #9CA3B0;
-  }
+  body.dark-mode .section-title { color: #E8EAF0; }
+  body.dark-mode .segmented { background: #252932; }
+  body.dark-mode .seg-btn { color: #9CA3B0; }
+  body.dark-mode .seg-btn.active { background: #E8EAF0; color: #1A1D26; }
+  body.dark-mode .toggle { background: #2A2E3A; }
+  body.dark-mode .toggle.on { background: #FF7A00; }
+  body.dark-mode .toggle .knob { background: #fff; }
+  body.dark-mode .perm-banner { background: #3D2E0F; border-color: #FFA033; color: #FFA033; }
+  body.dark-mode .call-chip { background: #252932; color: #E8EAF0; }
+  body.dark-mode .call-chip.danger { background: #3D1520; color: #FF4D73; }
+  body.dark-mode .toast { background: #F0F2F8; color: #12151F; }
+  body.dark-mode .toast.danger { background: #FF4D73; color: #fff; }
+  body.dark-mode .empty-state { color: #9CA3B0; }
+  body.dark-mode .map-container { background: #12151F; }
+  body.dark-mode .leaflet-tile { filter: brightness(0.8) contrast(1.1) saturate(0.8); }
+  body.dark-mode .leaflet-popup-content-wrapper { background: #1A1D26; color: #E8EAF0; }
+  body.dark-mode .leaflet-popup-tip { background: #1A1D26; }
+  body.dark-mode .link-btn { color: #FFA033; }
+  body.dark-mode .brand p { color: #9CA3B0; }
 
-  /* ===== LANGUAGE FONT SWITCHING ===== */
   body.lang-hi {
     --font-body: 'Noto Sans Devanagari', 'Poppins', sans-serif;
-    --font-head: 'Noto Sans Devanagari', 'Oswald', sans-serif;
+    --font-head: 'Noto Sans Devanagari', 'Poppins', sans-serif;
   }
   body.lang-en {
     --font-body: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-    --font-head: 'Oswald', 'Noto Sans Devanagari', sans-serif;
+    --font-head: 'Poppins', 'Noto Sans Devanagari', sans-serif;
   }
 
   *{box-sizing:border-box;}
@@ -259,157 +113,153 @@
     transition: background .3s, color .3s;
   }
   button, input, select, textarea{ font-family:inherit; }
-  h1, h2, h3, h4, h5, h6{ font-family:var(--font-head); color:var(--teal); font-weight:500; margin:0; }
+  h1, h2, h3, h4, h5, h6{ font-family:var(--font-head); color:var(--teal); font-weight:600; margin:0; }
 
   .shell{
     width:100%;
-    max-width:1200px;
-    margin:0 auto;
     min-height:100vh;
     background:var(--cream);
     display:flex;
     flex-direction:column;
-    box-shadow:0 0 60px -20px rgba(18,21,31,.15);
     transition: background .3s;
   }
   .hidden{ display:none !important; }
   .view{ display:flex; flex-direction:column; flex:1; min-height:0; }
 
-  ::-webkit-scrollbar{ width:6px; height:6px; }
+  ::-webkit-scrollbar{ width:8px; height:8px; }
   ::-webkit-scrollbar-thumb{ background:#c4c7ce; border-radius:99px; }
   body.dark-mode ::-webkit-scrollbar-thumb{ background:#3A3F4A; }
 
-  /* ---------- Auth ---------- */
-  .auth-wrap{
-    padding:56px 40px 40px;
-    display:flex;
-    flex-direction:column;
-    gap:22px;
-    flex:1;
-    max-width:520px;
-    width:100%;
-    margin:0 auto;
+  /* ============ TOP NAVBAR ============ */
+  .site-header{
+    position:sticky; top:0; z-index:100;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    transition: background .3s;
   }
-  .brand{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:4px; }
-  .brand-mark{
-    width:64px; height:64px; border-radius:20px;
+  .site-header-inner{
+    max-width:1280px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 32px; gap:20px;
+  }
+  .site-logo{
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none; color:var(--teal-deep);
+    font-family:var(--font-head); font-weight:700; font-size:19px;
+    letter-spacing:.01em;
+  }
+  .site-logo .logo-mark{
+    width:38px; height:38px; border-radius:11px;
     background:linear-gradient(155deg,var(--teal),var(--teal-deep));
     display:flex; align-items:center; justify-content:center;
-    box-shadow:0 10px 22px -8px rgba(18,21,31,.55);
+    flex-shrink:0;
   }
-  .brand-mark svg{ width:34px; height:34px; }
-  .brand h1{ font-family:var(--font-head); font-size:26px; font-weight:600; margin:0; letter-spacing:.02em; text-transform:uppercase; color:var(--teal-deep); }
-  .brand p{ margin:0; font-size:13px; color:var(--ink-soft); text-align:center; line-height:1.4; }
+  .site-logo .logo-mark svg{ width:22px; height:22px; }
 
-  .segmented{
-    display:flex; background:var(--teal-soft); border-radius:999px; padding:4px; gap:4px;
+  .site-nav{
+    display:flex; align-items:center; gap:6px; flex:1; justify-content:center;
   }
-  .seg-btn{
-    flex:1; border:none; background:transparent; padding:10px 0; border-radius:999px;
-    font-family:var(--font-head); font-weight:500; font-size:14px; letter-spacing:.03em; text-transform:uppercase;
-    color:var(--teal-deep); cursor:pointer; transition:.2s;
+  .nav-link{
+    background:none; border:none; cursor:pointer;
+    font-family:var(--font-body); font-weight:500; font-size:14px;
+    color:var(--ink-soft); padding:8px 16px; border-radius:999px;
+    transition:.2s; text-decoration:none;
   }
-  .seg-btn.active{ background:var(--teal); color:#fff; box-shadow:0 6px 14px -6px rgba(18,21,31,.5); }
-  body.dark-mode .seg-btn.active{ background:var(--teal); color:var(--teal-deep); }
+  .nav-link:hover{ color:var(--teal-deep); background:var(--teal-soft); }
+  .nav-link.active{ color:#fff; background:var(--teal-deep); }
+  body.dark-mode .nav-link.active{ color:var(--teal-deep); background:var(--teal); }
 
-  .auth-form{ display:flex; flex-direction:column; gap:12px; }
-  .field{ display:flex; flex-direction:column; gap:6px; }
-  .field label{ font-size:12px; font-weight:600; color:var(--ink-soft); }
-  .field input, .field select, .field textarea{
-    border:1.5px solid var(--line); background:var(--paper); border-radius:var(--radius-sm);
-    padding:11px 13px; font-size:14.5px; color:var(--ink); outline:none; transition:.15s;
-  }
-  .field textarea{ resize:vertical; min-height:56px; }
-  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--teal); box-shadow:0 0 0 3px rgba(27,32,50,.16); }
-  .field-row{ display:flex; gap:10px; }
-  .field-row .field{ flex:1; }
-
-  .btn{
-    border:none; border-radius:var(--radius-sm); padding:13px 16px;
-    font-family:var(--font-head); font-weight:500; font-size:14.5px; letter-spacing:.03em; text-transform:uppercase;
-    cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center; gap:8px;
-  }
-  .btn:active{ transform:scale(.98); }
-  .btn-primary{ background:var(--teal); color:#fff; box-shadow:0 8px 18px -8px rgba(18,21,31,.55); }
-  body.dark-mode .btn-primary{ background:var(--teal); color:var(--teal-deep); }
-  .btn-danger{ background:var(--brick); color:#fff; box-shadow:0 8px 18px -8px rgba(245,50,92,.45); }
-  .btn-amber{ background:var(--amber); color:var(--teal-deep); box-shadow:0 8px 18px -8px rgba(255,170,23,.5); }
-  .btn-ghost{ background:transparent; color:var(--teal-deep); border:1.5px solid var(--line); }
-  .btn-block{ width:100%; }
-  .link-btn{
-    background:none; border:none; color:var(--amber); font-family:var(--font-head); font-weight:500; font-size:13px; cursor:pointer;
-    padding:2px; text-align:center; text-decoration:underline; text-underline-offset:3px; letter-spacing:.01em;
-  }
-
-  /* ---------- Modal / overlays ---------- */
-  .modal-overlay, .overlay{
-    position:fixed; inset:0; background:rgba(18,21,31,.55); backdrop-filter:blur(2px);
-    display:flex; align-items:center; justify-content:center; z-index:50; padding:24px;
-  }
-  .modal-card{
-    background:var(--paper); width:100%; max-width:420px; border-radius:24px;
-    padding:24px 22px 28px; display:flex; flex-direction:column; gap:14px; max-height:85vh; overflow-y:auto;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,.35);
-  }
-  .modal-card h3{ margin:0; font-size:17px; color:var(--teal-deep); }
-  .modal-close{ align-self:flex-end; background:none; border:none; color:var(--ink-soft); font-size:13px; cursor:pointer; }
-
-  .sheet{
-    background:var(--paper); width:100%; max-width:460px; border-radius:24px; padding:24px; display:flex;
-    flex-direction:column; gap:12px; box-shadow:0 30px 60px -20px rgba(0,0,0,.35);
-  }
-  .sheet-handle{ width:40px; height:4px; background:var(--line); border-radius:99px; margin:0 auto 4px; }
-  .sheet-user{ display:flex; align-items:center; gap:12px; }
-
-  /* ---------- App shell ---------- */
-  .topbar{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:22px 32px 16px; background:var(--cream); border-bottom:1px solid var(--line);
-    position:sticky; top:0; z-index:20; transition: background .3s;
-  }
-  .topbar-actions{ display:flex; align-items:center; gap:8px; }
-  .who{ display:flex; align-items:center; gap:11px; }
-  .avatar{
-    width:42px; height:42px; border-radius:14px; background:var(--teal); color:#fff;
-    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px;
-    overflow:hidden; flex-shrink:0;
-  }
-  body.dark-mode .avatar{ background:var(--teal-soft); color:var(--teal-deep); }
-  .avatar img{ width:100%; height:100%; object-fit:cover; }
-  .who-name{ font-family:var(--font-head); font-weight:500; font-size:15px; color:var(--ink); line-height:1.2; letter-spacing:.01em; }
-  .who-sub{ font-size:11.5px; color:var(--ink-soft); }
+  .site-header-actions{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
   .icon-btn{
-    background:var(--teal-soft); border:none; width:38px; height:38px; border-radius:12px;
+    background:var(--teal-soft); border:none; width:38px; height:38px; border-radius:11px;
     display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--teal-deep);
-    transition: .15s;
+    transition:.15s; font-size:16px;
   }
   .icon-btn:hover{ opacity:.8; }
-  .icon-btn.active{ background:var(--amber); color:#fff; }
 
-  .pages{ flex:1; padding:0 0 40px; }
-  .page{ padding:32px 32px 40px; display:flex; flex-direction:column; gap:22px; max-width:960px; margin:0 auto; width:100%; }
-
-  .bottomnav{
-    display:flex; background:var(--paper); border-top:1px solid var(--line); padding:10px 6px 14px;
-    position:sticky; bottom:0; z-index:20; max-width:1200px; width:100%; transition: background .3s;
+  .user-pill{
+    display:flex; align-items:center; gap:9px; padding:5px 12px 5px 5px;
+    background:var(--teal-soft); border-radius:999px; cursor:default;
   }
-  .nav-btn{
-    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px;
-    color:var(--ink-soft); font-family:var(--font-head); font-size:11px; font-weight:500; letter-spacing:.02em; text-transform:uppercase;
-    cursor:pointer; padding:6px 0; border-radius:12px; transition:.15s;
+  .user-pill .avatar{
+    width:32px; height:32px; border-radius:50%;
+    background:var(--teal-deep); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:12px; overflow:hidden; flex-shrink:0;
   }
-  .nav-btn svg{ width:21px; height:21px; }
-  .nav-btn.active{ color:var(--amber); }
+  .user-pill .avatar img{ width:100%; height:100%; object-fit:cover; }
+  .user-pill .uname{
+    font-size:13px; font-weight:600; color:var(--teal-deep);
+    max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
 
-  /* ---------- Home / Detector ---------- */
-  .detector-card{ display:flex; flex-direction:column; align-items:center; gap:16px; padding-top:6px; }
+  /* ============ PAGES ============ */
+  .pages{ flex:1; }
+  .page{
+    padding:48px 32px 80px;
+    display:flex; flex-direction:column; gap:28px;
+    max-width:1200px; margin:0 auto; width:100%;
+  }
+
+  .section-title{
+    font-family:var(--font-head); font-size:15px; font-weight:600;
+    color:var(--teal-deep); margin:0; letter-spacing:.03em;
+    text-transform:uppercase;
+  }
+  .section-title-lg{
+    font-family:var(--font-head); font-size:32px; font-weight:700;
+    color:var(--teal-deep); margin:0; line-height:1.2;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    background:linear-gradient(135deg, var(--teal-deep) 0%, #1A2233 100%);
+    border-radius:24px;
+    padding:60px 48px;
+    overflow:hidden;
+    color:#fff;
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 80% 20%, rgba(255,122,0,0.25), transparent 55%);
+    pointer-events:none;
+  }
+  .hero-content{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:center;
+  }
+  .hero-text h2{
+    font-family:var(--font-head);
+    color:#fff; font-size:42px; font-weight:700;
+    line-height:1.15; margin:0 0 14px; letter-spacing:-0.01em;
+  }
+  .hero-text h2 span{ color:var(--amber); }
+  .hero-text p{
+    color:rgba(255,255,255,0.7); font-size:15px; line-height:1.6;
+    margin:0 0 24px; max-width:480px;
+  }
+  .hero-tag{
+    display:inline-block; padding:5px 14px; border-radius:999px;
+    background:rgba(255,122,0,0.15); color:var(--amber);
+    font-size:12px; font-weight:600; letter-spacing:.05em;
+    text-transform:uppercase; margin-bottom:16px;
+  }
+
+  /* Detector Ring inside hero */
+  .hero-detector{ display:flex; flex-direction:column; align-items:center; gap:16px; }
   .ring-wrap{ position:relative; width:220px; height:220px; }
   .ring-bg, .ring-pulse{ position:absolute; inset:0; border-radius:50%; }
-  .ring-bg{ background:radial-gradient(circle at 50% 40%, #2B3245, var(--teal-deep)); box-shadow:0 20px 40px -15px rgba(18,21,31,.55); }
+  .ring-bg{
+    background:radial-gradient(circle at 50% 40%, #2B3245, #0A0E18);
+    box-shadow:0 20px 40px -15px rgba(0,0,0,.6);
+    border:2px solid rgba(255,122,0,0.2);
+  }
   .ring-pulse{ border:3px solid var(--amber); opacity:0; transform:scale(1); }
   .ring-wrap.armed .ring-pulse{ animation:pulse 2.4s ease-out infinite; opacity:1; }
-  .ring-wrap.tripped .ring-bg{ background:radial-gradient(circle at 50% 40%, #7A1030, var(--brick)); }
-  .ring-wrap.tripped .ring-pulse{ border-color:var(--brick); animation-duration:1s; }
+  .ring-wrap.tripped .ring-bg{ background:radial-gradient(circle at 50% 40%, #7A1030, #F5325C); }
+  .ring-wrap.tripped .ring-pulse{ border-color:#F5325C; animation-duration:1s; }
   @keyframes pulse{
     0%{ transform:scale(.82); opacity:.65; }
     100%{ transform:scale(1.14); opacity:0; }
@@ -417,214 +267,325 @@
   .ring-icon{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
   .ring-icon svg{ width:78px; height:78px; }
   .ring-state{ text-align:center; }
-  .ring-state .label{ font-size:14px; font-weight:700; letter-spacing:.02em; color:var(--teal-deep); }
-  .ring-state .sub{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+  .ring-state .label{ font-size:15px; font-weight:700; letter-spacing:.02em; color:#fff; }
+  .ring-state .sub{ font-size:12.5px; color:rgba(255,255,255,0.6); margin-top:3px; }
 
   .toggle-row{ display:flex; align-items:center; justify-content:center; gap:12px; }
   .toggle{
-    position:relative; width:56px; height:32px; background:var(--line); border-radius:999px; border:none;
+    position:relative; width:56px; height:32px; background:#3A4055; border-radius:999px; border:none;
     cursor:pointer; transition:.2s; flex-shrink:0;
   }
-  .toggle.on{ background:var(--teal); }
+  .toggle.on{ background:var(--amber); }
   .toggle .knob{
     position:absolute; top:3px; left:3px; width:26px; height:26px; border-radius:50%; background:#fff;
     box-shadow:0 2px 6px rgba(0,0,0,.25); transition:.2s;
   }
   .toggle.on .knob{ left:27px; }
-  .toggle-label{ font-family:var(--font-head); font-size:14px; font-weight:500; color:var(--ink); letter-spacing:.02em; text-transform:uppercase; }
+  .toggle-label{ font-family:var(--font-body); font-size:13px; font-weight:600; color:rgba(255,255,255,0.85); letter-spacing:.02em; text-transform:uppercase; }
 
-  .signals-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:480px; width:100%; margin:0 auto; }
-  .signal-chip{
-    background:var(--paper); border:1.5px solid var(--line); border-radius:var(--radius-md);
-    padding:16px 8px; display:flex; flex-direction:column; align-items:center; gap:5px; transition:.2s;
-  }
-  .signal-chip.tripped{ background:var(--brick-soft); border-color:var(--brick); }
-  .signal-chip .s-label{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); }
-  .signal-chip.tripped .s-label{ color:var(--brick); }
-  .signal-chip .s-value{ font-size:15px; font-weight:700; color:var(--ink); }
+  /* ============ DARK CARDS GRID (template style) ============ */
+  .cards-section{ display:flex; flex-direction:column; gap:20px; }
+  .cards-head{ text-align:center; display:flex; flex-direction:column; gap:8px; align-items:center; }
+  .cards-head p{ color:var(--ink-soft); font-size:14px; margin:0; max-width:520px; text-align:center; }
 
-  .test-link{ text-align:center; margin-top:-6px; }
-  .how-card{
-    background:var(--paper); border:1.5px solid var(--line); border-radius:var(--radius-md);
-    padding:18px 22px; display:flex; flex-direction:column; gap:10px; max-width:600px; margin:0 auto; width:100%;
+  .cards-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;
   }
-  .how-list{ margin:0; padding-left:20px; display:flex; flex-direction:column; gap:7px; }
-  .how-list li{ font-size:13px; color:var(--ink-soft); line-height:1.55; }
-  .perm-banner{
-    background:var(--amber-soft); border:1.5px solid var(--amber); border-radius:var(--radius-md);
-    padding:14px 18px; font-size:13px; color:#5A4413; line-height:1.5; max-width:600px; margin:0 auto;
+  .card-dark{
+    background:var(--teal-deep); color:#fff;
+    border-radius:18px; padding:28px 24px;
+    display:flex; flex-direction:column; gap:12px;
+    border:1px solid #1E2536;
+    transition:.25s;
+    position:relative; overflow:hidden;
   }
-  body.dark-mode .perm-banner{ color: var(--amber); }
-  .section-title{ font-family:var(--font-head); font-size:15px; font-weight:500; color:var(--teal-deep); margin:0; letter-spacing:.03em; text-transform:uppercase; }
+  .card-dark:hover{ transform:translateY(-3px); box-shadow:0 18px 36px -16px rgba(15,21,35,.5); }
+  .card-dark::after{
+    content:''; position:absolute; top:0; left:0; width:100%; height:3px;
+    background:linear-gradient(90deg, var(--amber), transparent);
+    opacity:0; transition:.25s;
+  }
+  .card-dark:hover::after{ opacity:1; }
+  .card-icon{
+    width:48px; height:48px; border-radius:13px;
+    background:rgba(255,122,0,0.12);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--amber);
+  }
+  .card-icon svg{ width:24px; height:24px; }
+  .card-dark h3{
+    color:#fff; font-size:17px; font-weight:600; margin:4px 0 0;
+    font-family:var(--font-head);
+  }
+  .card-dark p{
+    color:rgba(255,255,255,0.6); font-size:13px; line-height:1.55;
+    margin:0;
+  }
+  .card-dark .s-value{
+    color:var(--amber); font-size:22px; font-weight:700;
+    font-family:var(--font-head); margin-top:4px;
+  }
+  .card-dark.tripped{
+    background:linear-gradient(135deg, #3D1520, #F5325C);
+    border-color:#F5325C;
+  }
+  .card-dark.tripped .card-icon{ background:rgba(255,255,255,0.15); color:#fff; }
+  .card-dark.tripped .s-value{ color:#fff; }
 
-  /* ---------- Contacts ---------- */
+  /* ============ BUTTONS ============ */
+  .btn{
+    border:none; border-radius:10px; padding:12px 22px;
+    font-family:var(--font-body); font-weight:600; font-size:14px;
+    cursor:pointer; transition:.18s; display:inline-flex; align-items:center;
+    justify-content:center; gap:8px; letter-spacing:.01em;
+  }
+  .btn:active{ transform:scale(.98); }
+  .btn-primary{ background:var(--teal-deep); color:#fff; }
+  .btn-primary:hover{ background:#1A2233; }
+  body.dark-mode .btn-primary{ background:var(--amber); color:#0A0E18; }
+  .btn-danger{ background:var(--brick); color:#fff; }
+  .btn-danger:hover{ background:#D62047; }
+  .btn-amber{ background:var(--amber); color:#fff; }
+  .btn-amber:hover{ background:#E56E00; }
+  .btn-ghost{ background:transparent; color:var(--teal-deep); border:1.5px solid var(--line); }
+  .btn-ghost:hover{ background:var(--teal-soft); }
+  .btn-block{ width:100%; }
+  .link-btn{
+    background:none; border:none; color:var(--amber); font-weight:600; font-size:13px;
+    cursor:pointer; padding:2px; text-align:center; text-decoration:underline;
+    text-underline-offset:3px;
+  }
+
+  /* ============ AUTH ============ */
+  .auth-wrap{
+    padding:60px 32px;
+    display:flex; flex-direction:column; gap:22px;
+    flex:1; max-width:460px; width:100%; margin:0 auto; justify-content:center;
+  }
+  .brand{ display:flex; flex-direction:column; align-items:center; gap:12px; margin-bottom:8px; }
+  .brand-mark{
+    width:64px; height:64px; border-radius:18px;
+    background:linear-gradient(155deg,var(--teal),var(--teal-deep));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 24px -10px rgba(15,21,35,.5);
+  }
+  .brand-mark svg{ width:34px; height:34px; }
+  .brand h1{ font-family:var(--font-head); font-size:26px; font-weight:700; margin:0; color:var(--teal-deep); letter-spacing:-0.01em; }
+  .brand p{ margin:0; font-size:13px; color:var(--ink-soft); text-align:center; line-height:1.5; }
+
+  .segmented{ display:flex; background:var(--teal-soft); border-radius:999px; padding:4px; gap:4px; }
+  .seg-btn{
+    flex:1; border:none; background:transparent; padding:10px 0; border-radius:999px;
+    font-family:var(--font-body); font-weight:600; font-size:14px;
+    color:var(--teal-deep); cursor:pointer; transition:.2s;
+  }
+  .seg-btn.active{ background:var(--teal-deep); color:#fff; }
+  body.dark-mode .seg-btn.active{ background:var(--teal); color:var(--teal-deep); }
+
+  .auth-form{ display:flex; flex-direction:column; gap:14px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:12px; font-weight:600; color:var(--ink-soft); letter-spacing:.02em; }
+  .field input, .field select, .field textarea{
+    border:1.5px solid var(--line); background:var(--paper); border-radius:10px;
+    padding:12px 14px; font-size:14.5px; color:var(--ink); outline:none; transition:.15s;
+  }
+  .field textarea{ resize:vertical; min-height:56px; }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    border-color:var(--amber); box-shadow:0 0 0 3px rgba(255,122,0,.12);
+  }
+  .field-row{ display:flex; gap:12px; }
+  .field-row .field{ flex:1; }
+
+  /* ============ MODAL / OVERLAYS ============ */
+  .modal-overlay, .overlay{
+    position:fixed; inset:0; background:rgba(10,14,24,.6); backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center; z-index:200; padding:24px;
+  }
+  .modal-card{
+    background:var(--paper); width:100%; max-width:440px; border-radius:22px;
+    padding:26px 24px 28px; display:flex; flex-direction:column; gap:14px;
+    max-height:85vh; overflow-y:auto;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.4);
+  }
+  .modal-card h3{ margin:0; font-size:18px; color:var(--teal-deep); font-family:var(--font-head); }
+  .modal-close{ align-self:flex-end; background:none; border:none; color:var(--ink-soft); font-size:13px; cursor:pointer; }
+
+  .sheet{
+    background:var(--paper); width:100%; max-width:440px; border-radius:22px; padding:24px;
+    display:flex; flex-direction:column; gap:12px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.4);
+  }
+  .sheet-handle{ width:40px; height:4px; background:var(--line); border-radius:99px; margin:0 auto 4px; }
+  .sheet-user{ display:flex; align-items:center; gap:12px; }
+
+  .avatar{
+    width:42px; height:42px; border-radius:12px; background:var(--teal-deep); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px;
+    overflow:hidden; flex-shrink:0;
+  }
+  body.dark-mode .avatar{ background:var(--teal-soft); color:var(--teal-deep); }
+  .avatar img{ width:100%; height:100%; object-fit:cover; }
+  .who-name{ font-weight:600; font-size:15px; color:var(--ink); line-height:1.2; }
+  .who-sub{ font-size:12px; color:var(--ink-soft); }
+
+  /* ============ SEARCH & USERS ============ */
   .search-bar{
-    display:flex; align-items:center; gap:8px; background:var(--paper); border:1.5px solid var(--line);
-    border-radius:999px; padding:11px 16px;
+    display:flex; align-items:center; gap:10px; background:var(--paper); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 16px; max-width:520px;
   }
-  .search-bar svg{ width:17px; height:17px; color:var(--ink-soft); flex-shrink:0; }
+  .search-bar svg{ width:18px; height:18px; color:var(--ink-soft); flex-shrink:0; }
   .search-bar input{ border:none; outline:none; background:transparent; flex:1; font-size:14px; color:var(--ink); }
 
-  .fav-strip{ display:flex; gap:14px; overflow-x:auto; padding:4px 2px 8px; }
-  .fav-chip{ display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; width:64px; cursor:pointer; }
-  .fav-chip .avatar{ width:56px; height:56px; border-radius:16px; font-size:18px; }
-  .fav-chip .fname{ font-size:11px; font-weight:600; color:var(--ink); text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:100%; }
+  .fav-strip{ display:flex; gap:14px; overflow-x:auto; padding:6px 2px 10px; }
+  .fav-chip{ display:flex; flex-direction:column; align-items:center; gap:7px; flex-shrink:0; width:72px; cursor:pointer; }
+  .fav-chip .avatar{ width:60px; height:60px; border-radius:16px; font-size:19px; }
+  .fav-chip .fname{ font-size:11.5px; font-weight:600; color:var(--ink); text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:100%; }
 
   .user-row{
-    display:flex; align-items:center; gap:11px; background:var(--paper); border:1.5px solid var(--line);
-    border-radius:var(--radius-md); padding:12px 14px;
+    display:flex; align-items:center; gap:12px; background:var(--paper); border:1.5px solid var(--line);
+    border-radius:14px; padding:12px 16px;
   }
   .user-row .meta{ flex:1; min-width:0; }
-  .user-row .u-name{ font-family:var(--font-head); font-weight:500; font-size:14px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .user-row .u-name{ font-weight:600; font-size:14px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .user-row .u-username{ font-size:12px; color:var(--ink-soft); }
-  .row-actions{ display:flex; gap:6px; flex-shrink:0; }
-  .row-actions button{ padding:8px 10px; font-size:12px; border-radius:9px; }
+  .row-actions{ display:flex; gap:8px; flex-shrink:0; }
+  .row-actions button{ padding:8px 14px; font-size:12.5px; border-radius:8px; }
 
-  .empty-state{ text-align:center; padding:28px 10px; color:var(--ink-soft); font-size:13px; line-height:1.6; }
+  .empty-state{ text-align:center; padding:32px 12px; color:var(--ink-soft); font-size:13.5px; line-height:1.6; }
 
-  /* ---------- Alerts ---------- */
+  /* ============ ALERTS ============ */
   .tabs{ display:flex; gap:8px; max-width:400px; }
   .tab-btn{
     flex:1; padding:10px 0; border-radius:999px; border:1.5px solid var(--line); background:var(--paper);
-    font-family:var(--font-head); font-size:13px; font-weight:500; letter-spacing:.03em; text-transform:uppercase;
-    color:var(--ink-soft); cursor:pointer;
+    font-size:13.5px; font-weight:600; color:var(--ink-soft); cursor:pointer;
   }
-  .tab-btn.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
-  body.dark-mode .tab-btn.active{ background:var(--teal); color:var(--teal-deep); }
+  .tab-btn.active{ background:var(--teal-deep); border-color:var(--teal-deep); color:#fff; }
+  body.dark-mode .tab-btn.active{ background:var(--amber); border-color:var(--amber); color:#0A0E18; }
+
   .alert-card{
     background:var(--paper); border:1.5px solid var(--line); border-left:4px solid var(--brick);
-    border-radius:var(--radius-md); padding:14px 16px; display:flex; flex-direction:column; gap:5px;
+    border-radius:14px; padding:16px 18px; display:flex; flex-direction:column; gap:6px;
   }
   .alert-card .a-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
-  .alert-card .a-name{ font-family:var(--font-head); font-weight:500; font-size:14px; color:var(--ink); }
-  .alert-card .a-time{ font-size:11px; color:var(--ink-soft); flex-shrink:0; }
-  .alert-card .a-msg{ font-size:13px; color:var(--ink-soft); line-height:1.45; }
-  .alert-card .a-tag{ font-size:10px; font-weight:700; color:var(--brick); text-transform:uppercase; letter-spacing:.03em; }
+  .alert-card .a-name{ font-weight:600; font-size:14.5px; color:var(--ink); }
+  .alert-card .a-time{ font-size:11.5px; color:var(--ink-soft); flex-shrink:0; }
+  .alert-card .a-msg{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
+  .alert-card .a-tag{ font-size:10.5px; font-weight:700; color:var(--brick); text-transform:uppercase; letter-spacing:.04em; }
   .alert-card .a-location{
-    display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--teal);
-    text-decoration:none; margin-top:2px;
+    display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600;
+    color:var(--amber); text-decoration:none; margin-top:4px;
   }
   .alert-card .a-location svg{ width:14px; height:14px; flex-shrink:0; }
   .alert-card .a-location-missing{ color:var(--ink-soft); font-weight:500; }
-  .alert-card .call-links{ margin-top:6px; }
-  .alert-card .call-chip{ padding:6px 10px; font-size:11.5px; }
+  .alert-card .call-links{ margin-top:8px; }
 
-  /* ---------- Profile + MAP ---------- */
-  .avatar-upload{ display:flex; align-items:center; gap:14px; }
-  .avatar-upload .avatar{ width:72px; height:72px; border-radius:20px; font-size:24px; }
+  /* ============ PROFILE PAGE ============ */
+  .profile-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start;
+  }
+  .profile-col{ display:flex; flex-direction:column; gap:20px; }
+
+  .avatar-upload{ display:flex; align-items:center; gap:16px; }
+  .avatar-upload .avatar{ width:80px; height:80px; border-radius:20px; font-size:26px; }
+
   .call-links{ display:flex; gap:8px; flex-wrap:wrap; }
   .call-chip{
-    display:flex; align-items:center; gap:6px; background:var(--teal-soft); color:var(--teal-deep);
-    padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:700; text-decoration:none;
+    display:inline-flex; align-items:center; gap:6px; background:var(--teal-soft); color:var(--teal-deep);
+    padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:600; text-decoration:none;
   }
   .call-chip svg{ width:14px; height:14px; }
   .call-chip.danger{ background:var(--brick-soft); color:var(--brick); }
 
-  /* ---------- MAP CARD ---------- */
-  .map-card {
-    background: var(--paper);
-    border: 1.5px solid var(--line);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 6px;
-    box-shadow: 0 8px 18px -10px rgba(0,0,0,.08);
+  /* ============ MAP CARD ============ */
+  .map-card{
+    background:var(--paper); border:1.5px solid var(--line);
+    border-radius:18px; padding:18px 20px 20px;
+    display:flex; flex-direction:column; gap:14px;
   }
-  .map-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
+  .map-header{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .map-actions{ display:flex; gap:8px; }
+  .map-btn{
+    background:var(--teal-soft); border:none; border-radius:999px; padding:7px 15px;
+    font-size:12.5px; font-weight:600; color:var(--teal-deep); cursor:pointer;
+    display:inline-flex; align-items:center; gap:5px; transition:.15s;
   }
-  .map-header .section-title { font-size: 14px; }
-  .map-actions {
-    display: flex;
-    gap: 8px;
+  .map-btn:hover{ opacity:.8; }
+  .map-btn svg{ width:14px; height:14px; }
+  .map-container{
+    width:100%; height:320px; border-radius:14px;
+    background:#eef1f6; overflow:hidden; position:relative; z-index:1;
   }
-  .map-btn {
-    background: var(--teal-soft);
-    border: none;
-    border-radius: 30px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--teal-deep);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    transition: .15s;
-  }
-  .map-btn:hover { opacity: .8; }
-  .map-btn svg { width: 14px; height: 14px; }
-  .map-container {
-    width: 100%;
-    height: 240px;
-    border-radius: var(--radius-md);
-    background: #eef1f6;
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-  }
-  body.dark-mode .map-container { background: #12151F; }
-  .map-container .leaflet-control-attribution { font-size: 9px; }
-  .map-status {
-    font-size: 12px;
-    color: var(--ink-soft);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .map-status .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #2ecc71;
-    display: inline-block;
-    animation: blink 1.5s infinite;
-  }
-  .map-status .dot.off { background: #b0b0b0; animation: none; }
-  @keyframes blink { 0%{opacity:1;} 50%{opacity:.3;} 100%{opacity:1;} }
+  .map-container .leaflet-control-attribution{ font-size:9px; }
+  .map-status{ font-size:12.5px; color:var(--ink-soft); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .map-status .dot{ width:9px; height:9px; border-radius:50%; background:#2ecc71; display:inline-block; animation:blink 1.5s infinite; }
+  .map-status .dot.off{ background:#b0b0b0; animation:none; }
+  @keyframes blink{ 0%{opacity:1;} 50%{opacity:.3;} 100%{opacity:1;} }
 
-  /* ---------- Countdown overlay ---------- */
-  #countdownOverlay{ background:rgba(15,17,14,.9); flex-direction:column; gap:24px; padding:32px 26px; align-items:center; justify-content:center; z-index:80; }
-  .cd-title{ font-family:var(--font-head); color:#fff; font-size:18px; font-weight:500; text-align:center; letter-spacing:.04em; text-transform:uppercase; }
+  /* ============ HOW CARD ============ */
+  .how-card{
+    background:var(--paper); border:1.5px solid var(--line); border-radius:16px;
+    padding:22px 26px; display:flex; flex-direction:column; gap:12px;
+  }
+  .how-list{ margin:0; padding-left:22px; display:flex; flex-direction:column; gap:8px; }
+  .how-list li{ font-size:13.5px; color:var(--ink-soft); line-height:1.6; }
+
+  .perm-banner{
+    background:var(--amber-soft); border:1.5px solid var(--amber); border-radius:14px;
+    padding:16px 20px; font-size:13.5px; color:#7A4A00; line-height:1.55;
+    max-width:760px; margin:0 auto;
+  }
+  body.dark-mode .perm-banner{ color: var(--amber); }
+
+  .test-link{ text-align:center; }
+
+  /* ============ COUNTDOWN ============ */
+  #countdownOverlay{
+    background:rgba(10,14,24,.94); flex-direction:column; gap:24px; padding:32px 26px;
+    align-items:center; justify-content:center; z-index:300;
+  }
+  .cd-title{ font-family:var(--font-head); color:#fff; font-size:20px; font-weight:700; text-align:center; letter-spacing:.05em; text-transform:uppercase; }
   .cd-num{
-    width:170px; height:170px; border-radius:50%; border:5px solid var(--brick); display:flex; align-items:center;
-    justify-content:center; font-size:60px; font-weight:800; color:#fff; background:rgba(245,50,92,.18);
+    width:180px; height:180px; border-radius:50%; border:5px solid var(--brick); display:flex; align-items:center;
+    justify-content:center; font-size:64px; font-weight:800; color:#fff; background:rgba(245,50,92,.18);
   }
-  .cd-sub{ color:#D8D2C4; font-size:13.5px; text-align:center; line-height:1.6; max-width:320px; }
+  .cd-sub{ color:rgba(255,255,255,0.75); font-size:14px; text-align:center; line-height:1.6; max-width:360px; }
 
-  /* ---------- Toast ---------- */
+  /* ============ TOAST ============ */
   .toast-container{
     position:fixed; left:0; right:0; bottom:40px; display:flex; flex-direction:column; align-items:center;
-    gap:8px; z-index:120; pointer-events:none; padding:0 20px;
+    gap:8px; z-index:400; pointer-events:none; padding:0 20px;
   }
   .toast{
-    background:var(--teal-deep); color:#fff; font-size:13px; font-weight:600; padding:11px 18px;
-    border-radius:999px; box-shadow:0 10px 20px -8px rgba(0,0,0,.4); max-width:100%;
+    background:var(--teal-deep); color:#fff; font-size:13px; font-weight:600; padding:12px 20px;
+    border-radius:999px; box-shadow:0 12px 24px -8px rgba(0,0,0,.4); max-width:100%;
     animation:toastIn .2s ease-out;
   }
   .toast.danger{ background:var(--brick); }
   @keyframes toastIn{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
 
-  /* ---------- Mobile tweaks ---------- */
-  @media (max-width:640px){
-    .auth-wrap{ padding:32px 20px 24px; }
-    .page{ padding:20px 18px 32px; }
-    .topbar{ padding:16px 18px 12px; }
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:960px){
+    .hero-content{ grid-template-columns:1fr; gap:32px; }
+    .hero-text h2{ font-size:32px; }
+    .cards-grid{ grid-template-columns:repeat(2, 1fr); }
+    .profile-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:720px){
+    .site-header-inner{ padding:12px 18px; flex-wrap:wrap; }
+    .site-nav{ order:3; width:100%; overflow-x:auto; justify-content:flex-start; padding-top:10px; border-top:1px solid var(--line); margin-top:4px; }
+    .nav-link{ padding:8px 14px; font-size:13px; white-space:nowrap; }
+    .page{ padding:28px 18px 60px; gap:22px; }
+    .hero{ padding:36px 24px; border-radius:18px; }
+    .hero-text h2{ font-size:26px; }
+    .cards-grid{ grid-template-columns:1fr; }
+    .section-title-lg{ font-size:24px; }
+    .field-row{ flex-direction:column; gap:12px; }
     .ring-wrap{ width:180px; height:180px; }
     .ring-icon svg{ width:64px; height:64px; }
-    .cd-num{ width:130px; height:130px; font-size:46px; }
-    .field-row{ flex-direction:column; gap:12px; }
-    .profile-section{ padding:24px 18px; }
-    .map-container { height: 180px; }
-    .topbar-actions{ gap:4px; }
-    .icon-btn{ width:34px; height:34px; }
+    .cd-num{ width:140px; height:140px; font-size:50px; }
+    .map-container{ height:220px; }
+    .user-pill .uname{ display:none; }
+    .auth-wrap{ padding:32px 20px; }
   }
 </style>
 </head>
@@ -637,7 +598,7 @@
     <div class="auth-wrap">
       <div class="brand">
         <div class="brand-mark">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F9FCFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#FFAA17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#FFFFFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#FF7A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h1>RakshaConnect</h1>
         <p data-i18n="tagline">Sensor-based accident detection.<br>Ek tap door apni suraksha.</p>
@@ -702,68 +663,118 @@
 
   <!-- ================= APP VIEW ================= -->
   <section id="view-app" class="view hidden">
-    <header class="topbar">
-      <div class="who">
-        <div class="avatar" id="topAvatar">R</div>
-        <div>
-          <div class="who-name" id="topName">—</div>
-          <div class="who-sub" id="topSub" data-i18n="standby">Suraksha standby</div>
+
+    <!-- ===== TOP NAVBAR (website style) ===== -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a class="site-logo" href="#">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#FFFFFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#FF7A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          RakshaConnect
+        </a>
+
+        <nav class="site-nav">
+          <button class="nav-link active" data-page="home" type="button" data-i18n="navHome">Home</button>
+          <button class="nav-link" data-page="contacts" type="button" data-i18n="navContacts">Contacts</button>
+          <button class="nav-link" data-page="alerts" type="button" data-i18n="navAlerts">Alerts</button>
+          <button class="nav-link" data-page="profile" type="button" data-i18n="navProfile">Profile</button>
+        </nav>
+
+        <div class="site-header-actions">
+          <button class="icon-btn" id="langToggleBtn" title="Language" type="button">🌐</button>
+          <button class="icon-btn" id="darkToggleBtn" title="Dark Mode" type="button">🌙</button>
+          <div class="user-pill">
+            <div class="avatar" id="topAvatar">R</div>
+            <span class="uname" id="topName">—</span>
+          </div>
+          <button class="icon-btn" id="logoutBtn" title="Logout" type="button">
+            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M15 4H7a2 2 0 00-2 2v12a2 2 0 002 2h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 12h11m0 0l-3.5-3.5M21 12l-3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
-      </div>
-      <div class="topbar-actions">
-        <button class="icon-btn" id="langToggleBtn" title="Language" type="button">🌐</button>
-        <button class="icon-btn" id="darkToggleBtn" title="Dark Mode" type="button">🌙</button>
-        <button class="icon-btn" id="logoutBtn" title="Logout" type="button">
-          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M15 4H7a2 2 0 00-2 2v12a2 2 0 002 2h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 12h11m0 0l-3.5-3.5M21 12l-3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
       </div>
     </header>
 
     <main class="pages">
 
-      <!-- HOME / DETECTOR -->
+      <!-- ================= HOME / DETECTOR ================= -->
       <div id="page-home" class="page">
-        <div class="detector-card">
-          <div class="ring-wrap" id="ringWrap">
-            <div class="ring-pulse"></div>
-            <div class="ring-bg"></div>
-            <div class="ring-icon">
-              <svg id="ringSvg" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F9FCFF" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 13.5l2.2 2.2L16 10" stroke="#FFAA17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+        <!-- HERO -->
+        <section class="hero">
+          <div class="hero-content">
+            <div class="hero-text">
+              <span class="hero-tag" data-i18n="tagline">Sensor-based accident detection</span>
+              <h2 data-i18n="heroTitle">Your Personal <span>Safety</span> Partner</h2>
+              <p data-i18n="heroSub">Turn on detection and let RakshaConnect monitor speed, rotation and impact. If an accident happens, your loved ones get alerted with your live location automatically.</p>
+            </div>
+
+            <div class="hero-detector">
+              <div class="ring-wrap" id="ringWrap">
+                <div class="ring-pulse"></div>
+                <div class="ring-bg"></div>
+                <div class="ring-icon">
+                  <svg id="ringSvg" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 13.5l2.2 2.2L16 10" stroke="#FF7A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="ring-state">
+                <div class="label" id="ringLabel" data-i18n="detectorOff">Detector band hai</div>
+                <div class="sub" id="ringSub" data-i18n="detectorOffSub">On karke apni suraksha shuru karein</div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label" data-i18n="detection">Detection</span>
+                <button class="toggle" id="detectToggle" type="button"><span class="knob"></span></button>
+              </div>
             </div>
           </div>
-          <div class="ring-state">
-            <div class="label" id="ringLabel" data-i18n="detectorOff">Detector band hai</div>
-            <div class="sub" id="ringSub" data-i18n="detectorOffSub">On karke apni suraksha shuru karein</div>
-          </div>
-          <div class="toggle-row">
-            <span class="toggle-label" data-i18n="detection">Detection</span>
-            <button class="toggle" id="detectToggle" type="button"><span class="knob"></span></button>
-          </div>
-        </div>
+        </section>
 
         <div id="permBanner" class="perm-banner hidden" data-i18n="permBanner">
           Motion sensor permission nahi mili. iPhone par Settings → Safari → Motion &amp; Orientation Access on karein, phir dubara try karein.
         </div>
 
-        <div class="signals-grid">
-          <div class="signal-chip" id="chip-speed">
-            <div class="s-label" data-i18n="speed">Speed</div>
-            <div class="s-value" id="val-speed">—</div>
+        <!-- SIGNALS AS DARK CARDS (template style) -->
+        <section class="cards-section">
+          <div class="cards-head">
+            <p class="section-title" data-i18n="signalsTitle">Live Sensor Signals</p>
+            <h2 class="section-title-lg" data-i18n="signalsHeading">Monitoring Your Safety in Real Time</h2>
           </div>
-          <div class="signal-chip" id="chip-rotation">
-            <div class="s-label" data-i18n="rotation">Rotation</div>
-            <div class="s-value" id="val-rotation">—</div>
-          </div>
-          <div class="signal-chip" id="chip-impact">
-            <div class="s-label" data-i18n="impact">Impact</div>
-            <div class="s-value" id="val-impact">—</div>
-          </div>
-        </div>
 
-        <div class="test-link">
-          <button class="link-btn" id="simulateBtn" type="button" data-i18n="simulate">Simulate accident (test)</button>
-        </div>
+          <div class="cards-grid">
+            <div class="card-dark" id="chip-speed">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" stroke-width="1.7"/><path d="M12 12l4-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              </div>
+              <h3 data-i18n="speed">Speed</h3>
+              <div class="s-value" id="val-speed">—</div>
+              <p data-i18n="speedDesc">Sudden speed drop can indicate a crash or hard braking event.</p>
+            </div>
 
+            <div class="card-dark" id="chip-rotation">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 10-2.5 5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 7v5h-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 data-i18n="rotation">Rotation</h3>
+              <div class="s-value" id="val-rotation">—</div>
+              <p data-i18n="rotationDesc">Sharp rotation spikes suggest the device tumbled or spun violently.</p>
+            </div>
+
+            <div class="card-dark" id="chip-impact">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 data-i18n="impact">Impact</h3>
+              <div class="s-value" id="val-impact">—</div>
+              <p data-i18n="impactDesc">High G-force impact is a strong indicator of a collision.</p>
+            </div>
+          </div>
+
+          <div class="test-link">
+            <button class="btn btn-ghost" id="simulateBtn" type="button" data-i18n="simulate">Simulate accident (test)</button>
+          </div>
+        </section>
+
+        <!-- HOW IT WORKS -->
         <div class="how-card">
           <p class="section-title" data-i18n="howItWorks">Ye kaam kaise karta hai</p>
           <ol class="how-list">
@@ -776,104 +787,100 @@
         </div>
       </div>
 
-      <!-- CONTACTS / FAVOURITES -->
+      <!-- ================= CONTACTS ================= -->
       <div id="page-contacts" class="page hidden">
-        <p class="section-title" data-i18n="favourites">Favourites</p>
-        <div class="fav-strip" id="favStrip"></div>
-
-        <p class="section-title" data-i18n="searchUsers">Users dhoondein</p>
-        <div class="search-bar">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Username se dhoondein...">
+        <div>
+          <p class="section-title" data-i18n="favourites">Favourites</p>
+          <div class="fav-strip" id="favStrip" style="margin-top:12px;"></div>
         </div>
-        <div id="searchResults"></div>
+
+        <div>
+          <p class="section-title" data-i18n="searchUsers">Users dhoondein</p>
+          <div class="search-bar" style="margin-top:12px;">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Username se dhoondein...">
+          </div>
+          <div id="searchResults" style="margin-top:14px;"></div>
+        </div>
       </div>
 
-      <!-- ALERTS / HISTORY -->
+      <!-- ================= ALERTS ================= -->
       <div id="page-alerts" class="page hidden">
+        <h2 class="section-title-lg" data-i18n="alertHistoryTitle">Alert History</h2>
         <div class="tabs">
           <button class="tab-btn active" data-tab="received" type="button" data-i18n="received">Received</button>
           <button class="tab-btn" data-tab="sent" type="button" data-i18n="sent">Sent</button>
         </div>
-        <div id="alertsList" style="display:flex;flex-direction:column;gap:10px;"></div>
+        <div id="alertsList" style="display:flex;flex-direction:column;gap:12px;"></div>
       </div>
 
-      <!-- PROFILE + LIVE MAP -->
+      <!-- ================= PROFILE + MAP ================= -->
       <div id="page-profile" class="page hidden">
-        <div class="avatar-upload">
-          <div class="avatar" id="profAvatar">R</div>
-          <div>
-            <label class="link-btn" for="avatarFile" style="cursor:pointer;" data-i18n="changeAvatar">Avatar badlein</label>
-            <input type="file" id="avatarFile" accept="image/*" class="hidden">
+        <h2 class="section-title-lg" data-i18n="profileTitle">Your Profile</h2>
+
+        <div class="profile-grid">
+          <!-- LEFT: Profile form -->
+          <div class="profile-col">
+            <div class="avatar-upload">
+              <div class="avatar" id="profAvatar">R</div>
+              <div>
+                <label class="link-btn" for="avatarFile" style="cursor:pointer;" data-i18n="changeAvatar">Avatar badlein</label>
+                <input type="file" id="avatarFile" accept="image/*" class="hidden">
+              </div>
+            </div>
+
+            <form id="profileForm" class="auth-form">
+              <div class="field"><label data-i18n="name">Naam</label><input type="text" id="pName"></div>
+              <div class="field-row">
+                <div class="field"><label data-i18n="bloodGroup">Blood Group</label>
+                  <select id="pBlood">
+                    <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+                  </select>
+                </div>
+                <div class="field"><label data-i18n="phone">Phone</label><input type="tel" id="pPhone"></div>
+              </div>
+              <div class="field"><label data-i18n="conditionsLabel">Medical conditions</label><textarea id="pConditions"></textarea></div>
+              <div class="field"><label data-i18n="familyPhone">Family ka phone</label><input type="tel" id="pFamPhone"></div>
+              <div class="field"><label data-i18n="address">Address</label><input type="text" id="pAddress"></div>
+              <div class="field"><label data-i18n="bio">Bio</label><textarea id="pBio"></textarea></div>
+              <div class="field-row">
+                <div class="field"><label data-i18n="policeNumber">Police number</label><input type="tel" id="pPolice"></div>
+                <div class="field"><label data-i18n="ambulanceNumber">Ambulance number</label><input type="tel" id="pAmbulance"></div>
+              </div>
+              <button class="btn btn-primary btn-block" type="submit" data-i18n="save">Save karein</button>
+            </form>
+          </div>
+
+          <!-- RIGHT: Map -->
+          <div class="profile-col">
+            <div class="map-card" id="liveMapCard">
+              <div class="map-header">
+                <p class="section-title" data-i18n="liveLocation">📍 Live Location</p>
+                <div class="map-actions">
+                  <button class="map-btn" id="mapCenterBtn" type="button" data-i18n="center">
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    Center
+                  </button>
+                  <button class="map-btn" id="mapRefreshBtn" type="button" data-i18n="refresh">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 10-2.5 5.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 7v5h-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Refresh
+                  </button>
+                </div>
+              </div>
+              <div class="map-container" id="liveMap"></div>
+              <div class="map-status" id="mapStatus">
+                <span class="dot off" id="mapDot"></span>
+                <span id="mapCoords" data-i18n="waitingLocation">Location wait kar rahe hain…</span>
+              </div>
+            </div>
+
+            <button class="btn btn-ghost btn-block" id="logoutBtn2" type="button" data-i18n="logout">Logout</button>
           </div>
         </div>
-        <form id="profileForm" class="auth-form">
-          <div class="field"><label data-i18n="name">Naam</label><input type="text" id="pName"></div>
-          <div class="field-row">
-            <div class="field"><label data-i18n="bloodGroup">Blood Group</label>
-              <select id="pBlood">
-                <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
-                <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
-              </select>
-            </div>
-            <div class="field"><label data-i18n="phone">Phone</label><input type="tel" id="pPhone"></div>
-          </div>
-          <div class="field"><label data-i18n="conditionsLabel">Medical conditions</label><textarea id="pConditions"></textarea></div>
-          <div class="field"><label data-i18n="familyPhone">Family ka phone</label><input type="tel" id="pFamPhone"></div>
-          <div class="field"><label data-i18n="address">Address</label><input type="text" id="pAddress"></div>
-          <div class="field"><label data-i18n="bio">Bio</label><textarea id="pBio"></textarea></div>
-          <div class="field-row">
-            <div class="field"><label data-i18n="policeNumber">Police number</label><input type="tel" id="pPolice"></div>
-            <div class="field"><label data-i18n="ambulanceNumber">Ambulance number</label><input type="tel" id="pAmbulance"></div>
-          </div>
-          <button class="btn btn-primary btn-block" type="submit" data-i18n="save">Save karein</button>
-        </form>
-
-        <!-- ===== MAP CARD ===== -->
-        <div class="map-card" id="liveMapCard">
-          <div class="map-header">
-            <p class="section-title" data-i18n="liveLocation">📍 Live Location</p>
-            <div class="map-actions">
-              <button class="map-btn" id="mapCenterBtn" type="button" data-i18n="center">
-                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-                Center
-              </button>
-              <button class="map-btn" id="mapRefreshBtn" type="button" data-i18n="refresh">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 10-2.5 5.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 7v5h-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Refresh
-              </button>
-            </div>
-          </div>
-          <div class="map-container" id="liveMap"></div>
-          <div class="map-status" id="mapStatus">
-            <span class="dot off" id="mapDot"></span>
-            <span id="mapCoords" data-i18n="waitingLocation">Location wait kar rahe hain…</span>
-          </div>
-        </div>
-
-        <button class="btn btn-ghost btn-block" id="logoutBtn2" type="button" data-i18n="logout">Logout</button>
       </div>
 
     </main>
-
-    <nav class="bottomnav">
-      <button class="nav-btn active" data-page="home" type="button">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 6.5V21H4V9.5L12 3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        <span data-i18n="navHome">Home</span>
-      </button>
-      <button class="nav-btn" data-page="contacts" type="button">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17.5" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M15.8 14.3c2.1.4 3.6 1.8 4.4 4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        <span data-i18n="navContacts">Contacts</span>
-      </button>
-      <button class="nav-btn" data-page="alerts" type="button">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 00-5 5v3.5L5 15h14l-2-3.5V8a5 5 0 00-5-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 18a2 2 0 004 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <span data-i18n="navAlerts">Alerts</span>
-      </button>
-      <button class="nav-btn" data-page="profile" type="button">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.3-4 3.9-6 7-6s5.7 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <span data-i18n="navProfile">Profile</span>
-      </button>
-    </nav>
   </section>
 
   <!-- ================= COUNTDOWN OVERLAY ================= -->
@@ -881,7 +888,7 @@
     <div class="cd-title" data-i18n="accidentDetected">ACCIDENT DETECT HUA HAI</div>
     <div class="cd-num" id="cdNum">20</div>
     <div class="cd-sub" data-i18n="countdownSub">Agar aap theek hain to Cancel dabayein. Nahi to emergency alert apne aap bhej diya jayega.</div>
-    <button class="btn btn-amber" id="cdCancel" type="button" style="min-width:200px;" data-i18n="cancelImOk">Cancel karein — main theek hoon</button>
+    <button class="btn btn-amber" id="cdCancel" type="button" style="min-width:220px;" data-i18n="cancelImOk">Cancel karein — main theek hoon</button>
     <div class="call-links" id="cdCallLinks" style="justify-content:center;"></div>
   </div>
 
@@ -905,7 +912,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
@@ -925,7 +931,16 @@ const usernameToEmail = (u) => (u || "").trim().toLowerCase() + AUTH_DOMAIN;
 ============================================================ */
 const I18N = {
   hi: {
-    tagline: "Sensor-based accident detection.<br>Ek tap door apni suraksha.",
+    tagline: "सेंसर-आधारित दुर्घटना डिटेक्शन।<br>एक टैप दूर अपनी सुरक्षा।",
+    heroTitle: "आपकी <span>सुरक्षा</span> का साथी",
+    heroSub: "डिटेक्शन चालू करें और RakshaConnect को गति, रोटेशन और प्रभाव की निगरानी करने दें। दुर्घटना होने पर आपके अपनों को लाइव लोकेशन के साथ अलर्ट चला जाता है।",
+    signalsTitle: "लाइव सेंसर सिग्नल",
+    signalsHeading: "रियल टाइम में आपकी सुरक्षा की निगरानी",
+    speedDesc: "अचानक गति गिरना दुर्घटना या तेज़ ब्रेकिंग का संकेत हो सकता है।",
+    rotationDesc: "तेज़ रोटेशन स्पाइक बताते हैं कि डिवाइस पलटा या घूमा है।",
+    impactDesc: "उच्च G-फोर्स प्रभाव टकराव का मज़बूत संकेत है।",
+    alertHistoryTitle: "अलर्ट इतिहास",
+    profileTitle: "आपकी प्रोफ़ाइल",
     login: "लॉगिन",
     signup: "साइनअप",
     username: "उपयोगकर्ता नाम",
@@ -993,6 +1008,15 @@ const I18N = {
   },
   en: {
     tagline: "Sensor-based accident detection.<br>One tap away from safety.",
+    heroTitle: "Your Personal <span>Safety</span> Partner",
+    heroSub: "Turn on detection and let RakshaConnect monitor speed, rotation and impact. If an accident happens, your loved ones get alerted with your live location automatically.",
+    signalsTitle: "Live Sensor Signals",
+    signalsHeading: "Monitoring Your Safety in Real Time",
+    speedDesc: "Sudden speed drop can indicate a crash or hard braking event.",
+    rotationDesc: "Sharp rotation spikes suggest the device tumbled or spun violently.",
+    impactDesc: "High G-force impact is a strong indicator of a collision.",
+    alertHistoryTitle: "Alert History",
+    profileTitle: "Your Profile",
     login: "Login",
     signup: "Signup",
     username: "Username",
@@ -1071,22 +1095,23 @@ function applyLanguage(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (I18N[lang][key]) {
-      el.textContent = I18N[lang][key];
+      if (key === 'tagline' || key === 'heroTitle') {
+        el.innerHTML = I18N[lang][key];
+      } else {
+        el.textContent = I18N[lang][key];
+      }
     }
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.dataset.i18nPlaceholder;
-    if (I18N[lang][key]) {
-      el.placeholder = I18N[lang][key];
-    }
+    if (I18N[lang][key]) el.placeholder = I18N[lang][key];
   });
-  // Update map btn labels
+
   const centerBtn = document.getElementById('mapCenterBtn');
   const refreshBtn = document.getElementById('mapRefreshBtn');
   if (centerBtn) centerBtn.innerHTML = centerBtn.innerHTML.replace(/(Center|सेंटर)/, I18N[lang].center);
   if (refreshBtn) refreshBtn.innerHTML = refreshBtn.innerHTML.replace(/(Refresh|रिफ्रेश)/, I18N[lang].refresh);
 
-  // Update detector label if active
   if (detectionOn) {
     document.getElementById('ringLabel').textContent = I18N[lang].detectorOn;
     document.getElementById('ringSub').textContent = I18N[lang].detectorOnSub;
@@ -1094,8 +1119,7 @@ function applyLanguage(lang) {
     document.getElementById('ringLabel').textContent = I18N[lang].detectorOff;
     document.getElementById('ringSub').textContent = I18N[lang].detectorOffSub;
   }
-  document.getElementById('topSub').textContent = detectionOn ? I18N[lang].detectorOn : I18N[lang].standby;
-
+  document.getElementById('topSub') && (document.getElementById('topSub').textContent = detectionOn ? I18N[lang].detectorOn : I18N[lang].standby);
   localStorage.setItem('rc_lang', lang);
 }
 
@@ -1103,17 +1127,13 @@ function applyLanguage(lang) {
    DARK MODE
 ============================================================ */
 let darkMode = false;
-
 function applyDarkMode(on) {
   darkMode = on;
   document.body.classList.toggle('dark-mode', on);
   const btn = document.getElementById('darkToggleBtn');
   if (btn) btn.textContent = on ? '☀️' : '🌙';
   localStorage.setItem('rc_dark', on ? '1' : '0');
-  if (map) {
-    // Refresh tiles for dark mode filter
-    setTimeout(() => { if (map) map.invalidateSize(); }, 100);
-  }
+  if (map) setTimeout(() => { if (map) map.invalidateSize(); }, 100);
 }
 
 /* ============================================================
@@ -1143,7 +1163,6 @@ const SPEED_DROP_THRESHOLD = 8;
 const MIN_SPEED_FOR_DROP = 5;
 const SIGNAL_HOLD_MS = 4000;
 
-/* ---------- MAP VARIABLES ---------- */
 let map = null;
 let marker = null;
 let mapInitDone = false;
@@ -1192,22 +1211,18 @@ function initMap() {
   if (!mapEl) return;
 
   map = L.map('liveMap').setView([20.5937, 78.9629], 5);
-
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
+    maxZoom: 19, attribution: '© OpenStreetMap'
   }).addTo(map);
 
   const customIcon = L.divIcon({
     className: 'custom-map-marker',
-    html: `<div style="background:#F5325C; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
-    iconSize: [18, 18],
-    iconAnchor: [9, 9]
+    html: `<div style="background:#FF7A00; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
+    iconSize: [18, 18], iconAnchor: [9, 9]
   });
 
   marker = L.marker([20.5937, 78.9629], { icon: customIcon }).addTo(map);
   marker.bindPopup('Aapki location').openPopup();
-
   mapInitDone = true;
 
   if (lastPosition) {
@@ -1218,25 +1233,21 @@ function initMap() {
     if (lastPosition) {
       updateMapLocation(lastPosition.coords.latitude, lastPosition.coords.longitude);
       toast(currentLang === 'hi' ? 'Map refresh ho gaya' : 'Map refreshed');
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        lastPosition = pos;
+        updateMapLocation(pos.coords.latitude, pos.coords.longitude);
+        toast(currentLang === 'hi' ? 'Location mil gayi' : 'Location found');
+      }, function(err) {
+        toast((currentLang === 'hi' ? 'Location nahi mili: ' : 'Location unavailable: ') + err.message, 'error');
+      }, { enableHighAccuracy: true, timeout: 10000 });
     } else {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          lastPosition = pos;
-          updateMapLocation(pos.coords.latitude, pos.coords.longitude);
-          toast(currentLang === 'hi' ? 'Location mil gayi' : 'Location found');
-        }, function(err) {
-          toast((currentLang === 'hi' ? 'Location nahi mili: ' : 'Location unavailable: ') + err.message, 'error');
-        }, { enableHighAccuracy: true, timeout: 10000 });
-      } else {
-        toast(currentLang === 'hi' ? 'Geolocation support nahi hai' : 'Geolocation not supported', 'error');
-      }
+      toast(currentLang === 'hi' ? 'Geolocation support nahi hai' : 'Geolocation not supported', 'error');
     }
   });
 
   document.getElementById('mapCenterBtn').addEventListener('click', function() {
-    if (map && marker) {
-      map.setView(marker.getLatLng(), 15);
-    }
+    if (map && marker) map.setView(marker.getLatLng(), 15);
   });
 
   setTimeout(() => { if (map) map.invalidateSize(); }, 300);
@@ -1263,7 +1274,7 @@ function setMapLoading(text) {
 }
 
 /* ============================================================
-   AUTH VIEW WIRING
+   AUTH WIRING
 ============================================================ */
 $all('#authSegment .seg-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -1337,7 +1348,6 @@ $('#signupForm').addEventListener('submit', async (e)=>{
   await loadProfileAndEnter();
 });
 
-/* Forgot password flow */
 $('#openForgot').addEventListener('click', ()=>{
   $('#forgotModal').classList.remove('hidden');
   $('#forgotStep1').classList.remove('hidden');
@@ -1418,15 +1428,16 @@ $('#logoutBtn').addEventListener('click', doLogout);
 $('#logoutBtn2').addEventListener('click', doLogout);
 
 /* ============================================================
-   BOTTOM NAV
+   NAV WIRING (top navbar)
 ============================================================ */
-$all('.nav-btn').forEach(btn=>{
+$all('.nav-link').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    $all('.nav-btn').forEach(b=>b.classList.remove('active'));
+    $all('.nav-link').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     $all('.page').forEach(p=>p.classList.add('hidden'));
     const pageId = 'page-' + btn.dataset.page;
-    $('#'+pageId).classList.remove('hidden');
+    const pageEl = $('#'+pageId);
+    if(pageEl) pageEl.classList.remove('hidden');
     if(btn.dataset.page === 'alerts') renderAlerts();
     if(btn.dataset.page === 'profile') {
       setTimeout(() => {
@@ -1451,7 +1462,6 @@ function updateDetectorUI(){
   $('#detectToggle').classList.toggle('on', detectionOn);
   $('#ringLabel').textContent = detectionOn ? I18N[currentLang].detectorOn : I18N[currentLang].detectorOff;
   $('#ringSub').textContent = detectionOn ? I18N[currentLang].detectorOnSub : I18N[currentLang].detectorOffSub;
-  $('#topSub').textContent = detectionOn ? I18N[currentLang].detectorOn : I18N[currentLang].standby;
 }
 
 function updateChipValue(name, text){
@@ -1652,7 +1662,7 @@ async function sendAccidentAlert(){
 }
 
 /* ============================================================
-   CONTACTS / FAVOURITES
+   CONTACTS
 ============================================================ */
 let searchDebounce = null;
 $('#searchInput').addEventListener('input', (e)=>{
@@ -1675,7 +1685,7 @@ async function searchUsers(q){
 function renderSearchResults(list){
   const box = $('#searchResults');
   if(!list.length){ box.innerHTML = '<div class="empty-state">' + (currentLang === 'hi' ? 'कोई उपयोगकर्ता नहीं मिला' : 'No user found') + '</div>'; return; }
-  box.style.display='flex'; box.style.flexDirection='column'; box.style.gap='9px'; box.style.marginTop='4px';
+  box.style.display='flex'; box.style.flexDirection='column'; box.style.gap='10px';
   box.innerHTML = list.map(u=>{
     const already = favourites.some(f=>f.fav_username===u.username);
     const addLabel = already ? (currentLang === 'hi' ? 'जोड़ा' : 'Added') : (currentLang === 'hi' ? '+ पसंदीदा' : '+ Fav');
@@ -1767,7 +1777,7 @@ async function sendDirectAlert(toUsername, toName){
 }
 
 /* ============================================================
-   ALERTS / HISTORY
+   ALERTS
 ============================================================ */
 $all('.tab-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -1887,12 +1897,11 @@ $('#profileForm').addEventListener('submit', async (e)=>{
 });
 
 /* ============================================================
-   THEME & LANGUAGE TOGGLES
+   TOGGLES
 ============================================================ */
 $('#langToggleBtn').addEventListener('click', ()=>{
   applyLanguage(currentLang === 'hi' ? 'en' : 'hi');
 });
-
 $('#darkToggleBtn').addEventListener('click', ()=>{
   applyDarkMode(!darkMode);
 });
@@ -1901,7 +1910,6 @@ $('#darkToggleBtn').addEventListener('click', ()=>{
    BOOT
 ============================================================ */
 (async function boot(){
-  // Load preferences
   const savedLang = localStorage.getItem('rc_lang') || 'hi';
   applyLanguage(savedLang);
   const savedDark = localStorage.getItem('rc_dark') === '1';
@@ -1914,4 +1922,4 @@ $('#darkToggleBtn').addEventListener('click', ()=>{
 })();
 </script>
 </body>
-  </html>
+</html>
