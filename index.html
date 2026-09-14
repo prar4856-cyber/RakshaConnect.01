@@ -1920,6 +1920,300 @@ $('#darkToggleBtn').addEventListener('click', ()=>{
 })();
 
 })();
+
+/* ============================================================
+   SMOOTH ANIMATIONS PACK (added on top of existing CSS)
+============================================================ */
+
+/* ---------- 1. Page load fade-in ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 2. Views & pages smooth entrance ---------- */
+.view { animation: fadeIn .45s ease-out; }
+.page:not(.hidden) { animation: fadeInUp .5s cubic-bezier(.22,.9,.32,1); }
+
+/* Section headings slide down */
+.section-title,
+.section-title-lg {
+  animation: fadeInDown .5s cubic-bezier(.22,.9,.32,1);
+}
+
+/* ---------- 3. Hero entrance (staggered) ---------- */
+.hero { animation: fadeInUp .6s cubic-bezier(.22,.9,.32,1); }
+.hero-text .hero-tag { animation: fadeInUp .6s .1s both cubic-bezier(.22,.9,.32,1); }
+.hero-text h2 { animation: fadeInUp .6s .2s both cubic-bezier(.22,.9,.32,1); }
+.hero-text p { animation: fadeInUp .6s .3s both cubic-bezier(.22,.9,.32,1); }
+.hero-detector { animation: scaleIn .7s .15s both cubic-bezier(.22,.9,.32,1); }
+
+/* ---------- 4. Cards staggered slide-in ---------- */
+.cards-grid > .card-dark,
+.cards-grid > .signal-chip {
+  animation: fadeInUp .55s both cubic-bezier(.22,.9,.32,1);
+}
+.cards-grid > *:nth-child(1) { animation-delay: .05s; }
+.cards-grid > *:nth-child(2) { animation-delay: .15s; }
+.cards-grid > *:nth-child(3) { animation-delay: .25s; }
+.cards-grid > *:nth-child(4) { animation-delay: .35s; }
+.cards-grid > *:nth-child(5) { animation-delay: .45s; }
+.cards-grid > *:nth-child(6) { animation-delay: .55s; }
+
+/* How-it-works card */
+.how-card { animation: fadeInUp .55s .35s both cubic-bezier(.22,.9,.32,1); }
+
+/* Perm banner */
+.perm-banner:not(.hidden) { animation: slideDown .4s ease-out; }
+
+/* ---------- 5. Buttons — hover lift & press feedback ---------- */
+.btn {
+  transition: transform .18s cubic-bezier(.22,.9,.32,1),
+              box-shadow .22s ease,
+              background-color .2s ease,
+              filter .2s ease;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.btn:active { transform: translateY(0) scale(.97); transition-duration: .08s; }
+
+/* Button glow on primary/danger/amber */
+.btn-primary:hover { box-shadow: 0 12px 24px -10px rgba(15,21,35,.55); }
+.btn-danger:hover  { box-shadow: 0 12px 24px -10px rgba(245,50,92,.55); }
+.btn-amber:hover   { box-shadow: 0 12px 24px -10px rgba(255,122,0,.55); }
+
+/* Ghost button subtle fill */
+.btn-ghost { transition: background-color .2s ease, border-color .2s ease, transform .18s; }
+.btn-ghost:hover { border-color: var(--amber); }
+
+/* Link buttons */
+.link-btn { transition: color .2s ease, letter-spacing .2s ease; }
+.link-btn:hover { letter-spacing: .02em; }
+
+/* ---------- 6. Nav links ---------- */
+.nav-link {
+  transition: color .2s ease, background-color .25s ease, transform .2s ease;
+}
+.nav-link:hover { transform: translateY(-1px); }
+
+/* Icon buttons rotate on hover */
+.icon-btn {
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1),
+              background-color .2s ease, opacity .2s ease;
+}
+.icon-btn:hover { transform: rotate(8deg) scale(1.06); }
+.icon-btn:active { transform: scale(.94); }
+
+/* ---------- 7. Ring & pulse smoothness ---------- */
+.ring-bg {
+  transition: background .5s ease, box-shadow .5s ease;
+}
+.ring-pulse {
+  transition: opacity .4s ease, border-color .4s ease;
+}
+.ring-wrap.armed .ring-bg {
+  animation: armedGlow 2.6s ease-in-out infinite;
+}
+@keyframes armedGlow {
+  0%, 100% { box-shadow: 0 20px 40px -15px rgba(18,21,31,.55),
+                         0 0 0 0 rgba(255,170,23,.0); }
+  50%      { box-shadow: 0 20px 40px -15px rgba(18,21,31,.55),
+                         0 0 0 14px rgba(255,170,23,0); }
+}
+.ring-wrap.tripped .ring-bg {
+  animation: trippedGlow 1s ease-in-out infinite;
+}
+@keyframes trippedGlow {
+  0%, 100% { box-shadow: 0 20px 40px -15px rgba(245,50,92,.4),
+                         0 0 0 0 rgba(245,50,92,.5); }
+  50%      { box-shadow: 0 20px 40px -15px rgba(245,50,92,.6),
+                         0 0 0 18px rgba(245,50,92,0); }
+}
+
+/* ---------- 8. Toggle knob bounce ---------- */
+.toggle { transition: background-color .25s ease; }
+.toggle .knob {
+  transition: left .28s cubic-bezier(.34,1.56,.64,1),
+              background-color .25s ease;
+}
+.toggle.on .knob { animation: knobBounce .35s cubic-bezier(.34,1.56,.64,1); }
+@keyframes knobBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- 9. Signal chips smooth transitions ---------- */
+.signal-chip, .card-dark {
+  transition: background-color .35s ease,
+              border-color .35s ease,
+              transform .25s cubic-bezier(.22,.9,.32,1),
+              box-shadow .3s ease;
+}
+.signal-chip.tripped, .card-dark.tripped {
+  animation: tripPulse .6s ease-out;
+}
+@keyframes tripPulse {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- 10. Modal & sheet entrance ---------- */
+.modal-overlay:not(.hidden),
+.overlay:not(.hidden) {
+  animation: fadeIn .25s ease-out;
+}
+.modal-card, .sheet {
+  animation: scaleIn .35s cubic-bezier(.22,.9,.32,1);
+}
+
+/* Countdown number pop */
+#cdNum { animation: cdPop .4s cubic-bezier(.34,1.56,.64,1); }
+@keyframes cdPop {
+  0%   { transform: scale(.85); opacity: .4; }
+  60%  { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* ---------- 11. Toast slide + fade ---------- */
+.toast {
+  animation: toastIn .28s cubic-bezier(.22,.9,.32,1);
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(14px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- 12. Search bar focus glow ---------- */
+.search-bar {
+  transition: border-color .25s ease, box-shadow .3s ease, background-color .25s ease;
+}
+.search-bar:focus-within {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(255,122,0,.12);
+}
+
+/* ---------- 13. Inputs & selects ---------- */
+.field input, .field select, .field textarea {
+  transition: border-color .2s ease,
+              box-shadow .25s ease,
+              background-color .25s ease,
+              transform .15s ease;
+}
+.field input:hover:not(:focus),
+.field select:hover:not(:focus),
+.field textarea:hover:not(:focus) {
+  border-color: #cdd2da;
+}
+
+/* ---------- 14. Favourite chip hover ---------- */
+.fav-chip {
+  transition: transform .25s cubic-bezier(.22,.9,.32,1);
+}
+.fav-chip:hover { transform: translateY(-4px); }
+.fav-chip .avatar {
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1),
+              box-shadow .3s ease;
+}
+.fav-chip:hover .avatar {
+  transform: scale(1.06);
+  box-shadow: 0 10px 22px -10px rgba(255,122,0,.5);
+}
+
+/* ---------- 15. User row hover ---------- */
+.user-row {
+  transition: border-color .25s ease,
+              transform .2s ease,
+              box-shadow .25s ease;
+}
+.user-row:hover {
+  transform: translateY(-1px);
+  border-color: #d5dae3;
+  box-shadow: 0 8px 18px -12px rgba(15,21,35,.25);
+}
+
+/* ---------- 16. Alert card hover ---------- */
+.alert-card {
+  transition: transform .2s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.alert-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -14px rgba(245,50,92,.35);
+}
+
+/* ---------- 17. Map buttons ---------- */
+.map-btn {
+  transition: transform .2s ease, background-color .2s ease, box-shadow .25s ease;
+}
+.map-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -8px rgba(15,21,35,.4);
+}
+.map-btn:active { transform: scale(.96); }
+
+/* ---------- 18. Tab buttons ---------- */
+.tab-btn {
+  transition: background-color .25s ease,
+              color .25s ease,
+              border-color .25s ease,
+              transform .18s ease;
+}
+.tab-btn:hover { transform: translateY(-1px); }
+
+/* ---------- 19. Segmented control ---------- */
+.seg-btn {
+  transition: background-color .25s ease,
+              color .25s ease,
+              transform .2s ease,
+              box-shadow .25s ease;
+}
+.seg-btn.active {
+  animation: scaleIn .25s ease-out;
+}
+
+/* ---------- 20. Avatar image fade-in ---------- */
+.avatar img { animation: fadeIn .4s ease-out; }
+
+/* ---------- 21. Empty state entrance ---------- */
+.empty-state { animation: fadeIn .5s ease-out; }
+
+/* ---------- 22. Page switching smoothness ---------- */
+.hidden { display: none !important; }
+.page:not(.hidden) { will-change: opacity, transform; }
+
+/* ---------- 23. Prefers-reduced-motion accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+  }
 </script>
 </body>
 </html>
