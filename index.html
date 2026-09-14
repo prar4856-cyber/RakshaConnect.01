@@ -4,8 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>RakshaConnect — Accident Alert</title>
+<script>try{if(localStorage.getItem('rc_theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --cream:#F2ECDD;
@@ -25,6 +28,24 @@
     --radius-md:16px;
     --radius-sm:11px;
   }
+  html[data-theme="dark"]{
+    --cream:#152522;
+    --backdrop:#0B1512;
+    --paper:#1C302C;
+    --teal:#3E9B8F;
+    --teal-deep:#DCE7E2;
+    --teal-soft:#24413B;
+    --brick:#E0685A;
+    --brick-soft:#3A2320;
+    --amber:#E5B15C;
+    --amber-soft:#3A2E17;
+    --ink:#F0EEE6;
+    --ink-soft:#A9B6B0;
+    --line:#2C433D;
+  }
+  html[data-theme="dark"] .brand-mark svg path[stroke="#F2ECDD"]{ stroke:#152522; }
+  html{ transition:background .2s; }
+  body{ transition:background-color .2s, color .2s; }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -147,6 +168,36 @@
   .icon-btn{
     background:var(--teal-soft); border:none; width:38px; height:38px; border-radius:12px;
     display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--teal-deep);
+  }
+  .header-actions{ display:flex; align-items:center; gap:8px; }
+  .lang-btn{
+    background:var(--teal-soft); border:none; height:38px; padding:0 12px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--teal-deep);
+    font-weight:700; font-size:12.5px; letter-spacing:.02em;
+  }
+
+  /* ---------- Live location map ---------- */
+  .map-card{
+    background:var(--paper); border:1.5px solid var(--line); border-radius:var(--radius-md);
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+  .map-card-head{
+    display:flex; align-items:center; justify-content:space-between; padding:12px 14px 0;
+  }
+  #liveMap{ width:100%; height:180px; margin-top:10px; background:var(--teal-soft); }
+  .map-status{ font-size:11px; color:var(--ink-soft); padding:8px 14px 12px; }
+  .map-status.live{ color:var(--teal); font-weight:700; }
+
+  /* ---------- SOS floating button ---------- */
+  .sos-fab{
+    position:fixed; right:20px; bottom:96px; z-index:60;
+    width:60px; height:60px; border-radius:50%; border:none; background:var(--brick); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;
+    box-shadow:0 12px 26px -10px rgba(178,58,46,.7); cursor:pointer; letter-spacing:.02em;
+  }
+  .sos-fab:active{ transform:scale(.95); }
+  @media (min-width:880px){
+    .sos-fab{ right:40px; bottom:40px; }
   }
 
   .pages{ flex:1; overflow-y:auto; position:relative; }
@@ -346,6 +397,7 @@
       grid-template-areas:
         "detector perm"
         "detector signals"
+        "detector map"
         "detector test"
         "detector how";
       gap:14px 32px;
@@ -355,6 +407,7 @@
     #page-home .ring-wrap{ width:230px; height:230px; }
     #page-home #permBanner{ grid-area:perm; }
     #page-home .signals-grid{ grid-area:signals; }
+    #page-home .map-card{ grid-area:map; }
     #page-home .test-link{ grid-area:test; }
     #page-home .how-card{ grid-area:how; }
 
@@ -372,34 +425,40 @@
   <!-- ================= AUTH VIEW ================= -->
   <section id="view-auth" class="view">
     <div class="auth-wrap">
+      <div class="header-actions" style="align-self:flex-end;">
+        <button class="lang-btn" id="langToggleAuth" type="button" title="Language">EN</button>
+        <button class="icon-btn" id="themeToggleAuth" title="Theme" type="button">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 3a9 9 0 109 9 7 7 0 01-9-9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
       <div class="brand">
         <div class="brand-mark">
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.2 3.4 9.8 8 11 4.6-1.2 8-5.8 8-11V5l-8-3z" stroke="#F2ECDD" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2 2 4-4.4" stroke="#D89B3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h1>RakshaConnect</h1>
-        <p>Sensor-based accident detection.<br>Ek tap door apni suraksha.</p>
+        <p data-i18n="tagline">Sensor-based accident detection.<br>Ek tap door apni suraksha.</p>
       </div>
 
       <div class="segmented" id="authSegment">
-        <button class="seg-btn active" data-mode="login" type="button">Login</button>
-        <button class="seg-btn" data-mode="signup" type="button">Signup</button>
+        <button class="seg-btn active" data-mode="login" type="button" data-i18n="loginTab">Login</button>
+        <button class="seg-btn" data-mode="signup" type="button" data-i18n="signupTab">Signup</button>
       </div>
 
       <form id="loginForm" class="auth-form">
-        <div class="field"><label>Username</label><input type="text" id="loginUsername" autocomplete="username" required></div>
-        <div class="field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
-        <button class="btn btn-primary btn-block" type="submit">Login karein</button>
-        <button class="link-btn" type="button" id="openForgot">Password bhool gaye?</button>
+        <div class="field"><label data-i18n="lblUsername">Username</label><input type="text" id="loginUsername" autocomplete="username" required></div>
+        <div class="field"><label data-i18n="lblPassword">Password</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="btnLogin">Login karein</button>
+        <button class="link-btn" type="button" id="openForgot" data-i18n="forgotPass">Password bhool gaye?</button>
       </form>
 
       <form id="signupForm" class="auth-form hidden">
         <div class="field-row">
-          <div class="field"><label>Username</label><input type="text" id="suUsername" required></div>
-          <div class="field"><label>Naam</label><input type="text" id="suName" required></div>
+          <div class="field"><label data-i18n="lblUsername">Username</label><input type="text" id="suUsername" required></div>
+          <div class="field"><label data-i18n="lblName">Naam</label><input type="text" id="suName" required></div>
         </div>
         <div class="field-row">
-          <div class="field"><label>Password</label><input type="password" id="suPassword" required minlength="6"></div>
-          <div class="field"><label>Blood Group</label>
+          <div class="field"><label data-i18n="lblPassword">Password</label><input type="password" id="suPassword" required minlength="6"></div>
+          <div class="field"><label data-i18n="lblBlood">Blood Group</label>
             <select id="suBlood">
               <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
               <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
@@ -407,14 +466,14 @@
           </div>
         </div>
         <div class="field-row">
-          <div class="field"><label>Phone</label><input type="tel" id="suPhone"></div>
-          <div class="field"><label>Family ka phone</label><input type="tel" id="suFamPhone"></div>
+          <div class="field"><label data-i18n="lblPhone">Phone</label><input type="tel" id="suPhone"></div>
+          <div class="field"><label data-i18n="lblFamPhone">Family ka phone</label><input type="tel" id="suFamPhone"></div>
         </div>
-        <div class="field"><label>Address</label><input type="text" id="suAddress"></div>
-        <div class="field"><label>Medical conditions (agar ho)</label><textarea id="suConditions" placeholder="Jaise — diabetes, allergy..."></textarea></div>
-        <div class="field"><label>Security sawaal (password recovery ke liye)</label><input type="text" id="suSecQ" placeholder="Jaise — aapke pehle pet ka naam?" required></div>
-        <div class="field"><label>Security jawaab</label><input type="text" id="suSecA" required></div>
-        <button class="btn btn-primary btn-block" type="submit">Account banayein</button>
+        <div class="field"><label data-i18n="lblAddress">Address</label><input type="text" id="suAddress"></div>
+        <div class="field"><label data-i18n="lblConditions">Medical conditions (agar ho)</label><textarea id="suConditions" placeholder="Jaise — diabetes, allergy..." data-i18n-ph="phConditions"></textarea></div>
+        <div class="field"><label data-i18n="lblSecQ">Security sawaal (password recovery ke liye)</label><input type="text" id="suSecQ" placeholder="Jaise — aapke pehle pet ka naam?" data-i18n-ph="phSecQ" required></div>
+        <div class="field"><label data-i18n="lblSecA">Security jawaab</label><input type="text" id="suSecA" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="btnSignup">Account banayein</button>
       </form>
     </div>
   </section>
@@ -422,17 +481,17 @@
   <!-- ================= FORGOT PASSWORD MODAL ================= -->
   <div id="forgotModal" class="modal-overlay hidden">
     <div class="modal-card">
-      <button class="modal-close" id="closeForgot" type="button">Band karein ✕</button>
-      <h3>Password reset karein</h3>
+      <button class="modal-close" id="closeForgot" type="button" data-i18n="close">Band karein ✕</button>
+      <h3 data-i18n="resetPassTitle">Password reset karein</h3>
       <div id="forgotStep1">
-        <div class="field"><label>Username</label><input type="text" id="fgUsername"></div>
-        <button class="btn btn-primary btn-block" id="fgNext" type="button">Aage badhein</button>
+        <div class="field"><label data-i18n="lblUsername">Username</label><input type="text" id="fgUsername"></div>
+        <button class="btn btn-primary btn-block" id="fgNext" type="button" data-i18n="next">Aage badhein</button>
       </div>
       <div id="forgotStep2" class="hidden">
         <p style="font-size:13px;color:var(--ink-soft);margin:0 0 4px;" id="fgQuestionText"></p>
-        <div class="field"><label>Aapka jawaab</label><input type="text" id="fgAnswer"></div>
-        <div class="field"><label>Naya password</label><input type="password" id="fgNewPass" minlength="6"></div>
-        <button class="btn btn-primary btn-block" id="fgReset" type="button">Password reset karein</button>
+        <div class="field"><label data-i18n="lblYourAnswer">Aapka jawaab</label><input type="text" id="fgAnswer"></div>
+        <div class="field"><label data-i18n="lblNewPass">Naya password</label><input type="password" id="fgNewPass" minlength="6"></div>
+        <button class="btn btn-primary btn-block" id="fgReset" type="button" data-i18n="resetPassBtn">Password reset karein</button>
       </div>
     </div>
   </div>
@@ -444,12 +503,18 @@
         <div class="avatar" id="topAvatar">R</div>
         <div>
           <div class="who-name" id="topName">—</div>
-          <div class="who-sub" id="topSub">Suraksha standby</div>
+          <div class="who-sub" id="topSub" data-i18n="standby">Suraksha standby</div>
         </div>
       </div>
-      <button class="icon-btn" id="logoutBtn" title="Logout" type="button">
-        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M15 4H7a2 2 0 00-2 2v12a2 2 0 002 2h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 12h11m0 0l-3.5-3.5M21 12l-3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+      <div class="header-actions">
+        <button class="lang-btn" id="langToggle" type="button" title="Language">EN</button>
+        <button class="icon-btn" id="themeToggle" title="Theme" type="button">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 3a9 9 0 109 9 7 7 0 01-9-9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="logoutBtn" title="Logout" type="button">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M15 4H7a2 2 0 00-2 2v12a2 2 0 002 2h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 12h11m0 0l-3.5-3.5M21 12l-3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </header>
 
     <main class="pages">
@@ -469,55 +534,63 @@
             <div class="sub" id="ringSub">On karke apni suraksha shuru karein</div>
           </div>
           <div class="toggle-row">
-            <span class="toggle-label">Detection</span>
+            <span class="toggle-label" data-i18n="detectionLabel">Detection</span>
             <button class="toggle" id="detectToggle" type="button"><span class="knob"></span></button>
           </div>
         </div>
 
-        <div id="permBanner" class="perm-banner hidden">
+        <div id="permBanner" class="perm-banner hidden" data-i18n="permBanner">
           Motion sensor permission nahi mili. iPhone par Settings → Safari → Motion &amp; Orientation Access on karein, phir dubara try karein.
         </div>
 
         <div class="signals-grid">
           <div class="signal-chip" id="chip-speed">
-            <div class="s-label">Speed</div>
+            <div class="s-label" data-i18n="speed">Speed</div>
             <div class="s-value" id="val-speed">—</div>
           </div>
           <div class="signal-chip" id="chip-rotation">
-            <div class="s-label">Rotation</div>
+            <div class="s-label" data-i18n="rotation">Rotation</div>
             <div class="s-value" id="val-rotation">—</div>
           </div>
           <div class="signal-chip" id="chip-impact">
-            <div class="s-label">Impact</div>
+            <div class="s-label" data-i18n="impact">Impact</div>
             <div class="s-value" id="val-impact">—</div>
           </div>
         </div>
 
+        <div class="map-card">
+          <div class="map-card-head">
+            <p class="section-title" data-i18n="mapTitle">Live location</p>
+          </div>
+          <div id="liveMap"></div>
+          <div class="map-status" id="mapStatus" data-i18n="mapWaiting">Location track ho rahi hai...</div>
+        </div>
+
         <div class="test-link">
-          <button class="link-btn" id="simulateBtn" type="button">Simulate accident (test)</button>
+          <button class="link-btn" id="simulateBtn" type="button" data-i18n="simulateBtn">Simulate accident (test)</button>
         </div>
 
         <div class="how-card">
-          <p class="section-title">Ye kaam kaise karta hai</p>
+          <p class="section-title" data-i18n="howTitle">Ye kaam kaise karta hai</p>
           <ol class="how-list">
-            <li>Detection ON karte hi phone ke motion aur location sensors chalu ho jaate hain.</li>
-            <li>Speed, Rotation aur Impact — teeno signal alag-alag monitor hote hain.</li>
-            <li>Jab teeno ek saath trip ho jaayein, to 20-second countdown shuru hota hai.</li>
-            <li>Aap theek hain to Cancel dabaakar rok sakte hain.</li>
-            <li>Cancel na kiya to family/favourites ko location ke saath alert chala jaata hai.</li>
+            <li data-i18n="how1">Detection ON karte hi phone ke motion aur location sensors chalu ho jaate hain.</li>
+            <li data-i18n="how2">Speed, Rotation aur Impact — teeno signal alag-alag monitor hote hain.</li>
+            <li data-i18n="how3">Jab teeno ek saath trip ho jaayein, to 20-second countdown shuru hota hai.</li>
+            <li data-i18n="how4">Aap theek hain to Cancel dabaakar rok sakte hain.</li>
+            <li data-i18n="how5">Cancel na kiya to family/favourites ko location ke saath alert chala jaata hai.</li>
           </ol>
         </div>
       </div>
 
       <!-- CONTACTS / FAVOURITES -->
       <div id="page-contacts" class="page hidden">
-        <p class="section-title">Favourites</p>
+        <p class="section-title" data-i18n="favourites">Favourites</p>
         <div class="fav-strip" id="favStrip"></div>
 
-        <p class="section-title">Users dhoondein</p>
+        <p class="section-title" data-i18n="findUsers">Users dhoondein</p>
         <div class="search-bar">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="searchInput" placeholder="Username se dhoondein...">
+          <input type="text" id="searchInput" placeholder="Username se dhoondein..." data-i18n-ph="searchPh">
         </div>
         <div id="searchResults"></div>
       </div>
@@ -525,8 +598,8 @@
       <!-- ALERTS / HISTORY -->
       <div id="page-alerts" class="page hidden">
         <div class="tabs">
-          <button class="tab-btn active" data-tab="received" type="button">Received</button>
-          <button class="tab-btn" data-tab="sent" type="button">Sent</button>
+          <button class="tab-btn active" data-tab="received" type="button" data-i18n="received">Received</button>
+          <button class="tab-btn" data-tab="sent" type="button" data-i18n="sent">Sent</button>
         </div>
         <div id="alertsList" style="display:flex;flex-direction:column;gap:10px;"></div>
       </div>
@@ -536,32 +609,32 @@
         <div class="avatar-upload">
           <div class="avatar" id="profAvatar">R</div>
           <div>
-            <label class="link-btn" for="avatarFile" style="cursor:pointer;">Avatar badlein</label>
+            <label class="link-btn" for="avatarFile" style="cursor:pointer;" data-i18n="changeAvatar">Avatar badlein</label>
             <input type="file" id="avatarFile" accept="image/*" class="hidden">
           </div>
         </div>
         <form id="profileForm" class="auth-form">
-          <div class="field"><label>Naam</label><input type="text" id="pName"></div>
+          <div class="field"><label data-i18n="lblName">Naam</label><input type="text" id="pName"></div>
           <div class="field-row">
-            <div class="field"><label>Blood Group</label>
+            <div class="field"><label data-i18n="lblBlood">Blood Group</label>
               <select id="pBlood">
                 <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
                 <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
               </select>
             </div>
-            <div class="field"><label>Phone</label><input type="tel" id="pPhone"></div>
+            <div class="field"><label data-i18n="lblPhone">Phone</label><input type="tel" id="pPhone"></div>
           </div>
-          <div class="field"><label>Medical conditions</label><textarea id="pConditions"></textarea></div>
-          <div class="field"><label>Family ka phone</label><input type="tel" id="pFamPhone"></div>
-          <div class="field"><label>Address</label><input type="text" id="pAddress"></div>
-          <div class="field"><label>Bio</label><textarea id="pBio"></textarea></div>
+          <div class="field"><label data-i18n="lblConditions2">Medical conditions</label><textarea id="pConditions"></textarea></div>
+          <div class="field"><label data-i18n="lblFamPhone">Family ka phone</label><input type="tel" id="pFamPhone"></div>
+          <div class="field"><label data-i18n="lblAddress">Address</label><input type="text" id="pAddress"></div>
+          <div class="field"><label data-i18n="lblBio">Bio</label><textarea id="pBio"></textarea></div>
           <div class="field-row">
-            <div class="field"><label>Police number</label><input type="tel" id="pPolice"></div>
-            <div class="field"><label>Ambulance number</label><input type="tel" id="pAmbulance"></div>
+            <div class="field"><label data-i18n="lblPolice">Police number</label><input type="tel" id="pPolice"></div>
+            <div class="field"><label data-i18n="lblAmbulance">Ambulance number</label><input type="tel" id="pAmbulance"></div>
           </div>
-          <button class="btn btn-primary btn-block" type="submit">Save karein</button>
+          <button class="btn btn-primary btn-block" type="submit" data-i18n="btnSave">Save karein</button>
         </form>
-        <button class="btn btn-ghost btn-block" id="logoutBtn2" type="button">Logout</button>
+        <button class="btn btn-ghost btn-block" id="logoutBtn2" type="button" data-i18n="logout">Logout</button>
       </div>
 
     </main>
@@ -569,29 +642,31 @@
     <nav class="bottomnav">
       <button class="nav-btn active" data-page="home" type="button">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 6.5V21H4V9.5L12 3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        Home
+        <span data-i18n="navHome">Home</span>
       </button>
       <button class="nav-btn" data-page="contacts" type="button">
         <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17.5" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M15.8 14.3c2.1.4 3.6 1.8 4.4 4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        Contacts
+        <span data-i18n="navContacts">Contacts</span>
       </button>
       <button class="nav-btn" data-page="alerts" type="button">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 00-5 5v3.5L5 15h14l-2-3.5V8a5 5 0 00-5-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 18a2 2 0 004 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        Alerts
+        <span data-i18n="navAlerts">Alerts</span>
       </button>
       <button class="nav-btn" data-page="profile" type="button">
         <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.3-4 3.9-6 7-6s5.7 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        Profile
+        <span data-i18n="navProfile">Profile</span>
       </button>
     </nav>
+
+    <button class="sos-fab" id="sosFab" type="button" title="SOS — shake phone bhi trigger karta hai">SOS</button>
   </section>
 
   <!-- ================= COUNTDOWN OVERLAY ================= -->
   <div id="countdownOverlay" class="overlay hidden">
-    <div class="cd-title">ACCIDENT DETECT HUA HAI</div>
+    <div class="cd-title" data-i18n="cdTitle">ACCIDENT DETECT HUA HAI</div>
     <div class="cd-num" id="cdNum">20</div>
-    <div class="cd-sub">Agar aap theek hain to Cancel dabayein. Nahi to emergency alert apne aap bhej diya jayega.</div>
-    <button class="btn btn-amber" id="cdCancel" type="button" style="min-width:180px;">Cancel karein — main theek hoon</button>
+    <div class="cd-sub" data-i18n="cdSub">Agar aap theek hain to Cancel dabayein. Nahi to emergency alert apne aap bhej diya jayega.</div>
+    <button class="btn btn-amber" id="cdCancel" type="button" style="min-width:180px;" data-i18n="cdCancel">Cancel karein — main theek hoon</button>
     <div class="call-links" id="cdCallLinks"></div>
   </div>
 
@@ -606,8 +681,8 @@
           <div class="who-sub" id="sheetUsername">—</div>
         </div>
       </div>
-      <button class="btn btn-danger btn-block" id="sheetSendAlert" type="button">Emergency alert bhejein</button>
-      <button class="btn btn-ghost btn-block" id="sheetClose" type="button">Band karein</button>
+      <button class="btn btn-danger btn-block" id="sheetSendAlert" type="button" data-i18n="sendAlert">Emergency alert bhejein</button>
+      <button class="btn btn-ghost btn-block" id="sheetClose" type="button" data-i18n="close2">Band karein</button>
     </div>
   </div>
 
@@ -688,6 +763,195 @@ function setAvatar(el, name, url){
   if(url){ el.innerHTML = `<img src="${url}" alt="">`; }
   else { el.textContent = initials(name); }
 }
+
+/* ============================================================
+   LANGUAGE (EN / HI)
+============================================================ */
+const I18N = {
+  hi:{
+    tagline:"Sensor-based accident detection.<br>Ek tap door apni suraksha.",
+    loginTab:"Login", signupTab:"Signup",
+    lblUsername:"Username", lblPassword:"Password", btnLogin:"Login karein", forgotPass:"Password bhool gaye?",
+    lblName:"Naam", lblBlood:"Blood Group", lblPhone:"Phone", lblFamPhone:"Family ka phone", lblAddress:"Address",
+    lblConditions:"Medical conditions (agar ho)", phConditions:"Jaise — diabetes, allergy...",
+    lblSecQ:"Security sawaal (password recovery ke liye)", phSecQ:"Jaise — aapke pehle pet ka naam?",
+    lblSecA:"Security jawaab", btnSignup:"Account banayein",
+    close:"Band karein ✕", resetPassTitle:"Password reset karein", next:"Aage badhein",
+    lblYourAnswer:"Aapka jawaab", lblNewPass:"Naya password", resetPassBtn:"Password reset karein",
+    detectionLabel:"Detection",
+    permBanner:"Motion sensor permission nahi mili. iPhone par Settings → Safari → Motion &amp; Orientation Access on karein, phir dubara try karein.",
+    speed:"Speed", rotation:"Rotation", impact:"Impact",
+    mapTitle:"Live location", mapWaiting:"Location track ho rahi hai...", mapLive:"Live — turant update ho rahi hai", mapDenied:"Location permission nahi mili",
+    simulateBtn:"Simulate accident (test)",
+    howTitle:"Ye kaam kaise karta hai",
+    how1:"Detection ON karte hi phone ke motion aur location sensors chalu ho jaate hain.",
+    how2:"Speed, Rotation aur Impact — teeno signal alag-alag monitor hote hain.",
+    how3:"Jab teeno ek saath trip ho jaayein, to 20-second countdown shuru hota hai.",
+    how4:"Aap theek hain to Cancel dabaakar rok sakte hain.",
+    how5:"Cancel na kiya to family/favourites ko location ke saath alert chala jaata hai.",
+    favourites:"Favourites", findUsers:"Users dhoondein", searchPh:"Username se dhoondein...",
+    received:"Received", sent:"Sent",
+    changeAvatar:"Avatar badlein", lblConditions2:"Medical conditions", lblBio:"Bio",
+    lblPolice:"Police number", lblAmbulance:"Ambulance number", btnSave:"Save karein", logout:"Logout",
+    navHome:"Home", navContacts:"Contacts", navAlerts:"Alerts", navProfile:"Profile",
+    cdTitle:"ACCIDENT DETECT HUA HAI",
+    cdSub:"Agar aap theek hain to Cancel dabayein. Nahi to emergency alert apne aap bhej diya jayega.",
+    cdCancel:"Cancel karein — main theek hoon",
+    sendAlert:"Emergency alert bhejein", close2:"Band karein",
+    ringOn:"Detector chalu hai", ringOff:"Detector band hai",
+    subOn:"Sensors monitor kar rahe hain", subOff:"On karke apni suraksha shuru karein",
+    standbyOn:"Suraksha active", standbyOff:"Suraksha standby",
+    emptyFav:"Abhi koi favourite nahi hai",
+    emptyReceived:"Koi alert receive nahi hua", emptySent:"Aapne koi alert nahi bheja",
+    sosConfirm:"Shake detect hua — SOS shuru",
+  },
+  en:{
+    tagline:"Sensor-based accident detection.<br>One tap away from your safety.",
+    loginTab:"Login", signupTab:"Signup",
+    lblUsername:"Username", lblPassword:"Password", btnLogin:"Log in", forgotPass:"Forgot password?",
+    lblName:"Name", lblBlood:"Blood Group", lblPhone:"Phone", lblFamPhone:"Family's phone", lblAddress:"Address",
+    lblConditions:"Medical conditions (if any)", phConditions:"e.g. — diabetes, allergy...",
+    lblSecQ:"Security question (for password recovery)", phSecQ:"e.g. — your first pet's name?",
+    lblSecA:"Security answer", btnSignup:"Create account",
+    close:"Close ✕", resetPassTitle:"Reset password", next:"Continue",
+    lblYourAnswer:"Your answer", lblNewPass:"New password", resetPassBtn:"Reset password",
+    detectionLabel:"Detection",
+    permBanner:"Motion sensor permission not granted. On iPhone go to Settings → Safari → Motion &amp; Orientation Access, then try again.",
+    speed:"Speed", rotation:"Rotation", impact:"Impact",
+    mapTitle:"Live location", mapWaiting:"Tracking your location...", mapLive:"Live — updating in real time", mapDenied:"Location permission not granted",
+    simulateBtn:"Simulate accident (test)",
+    howTitle:"How this works",
+    how1:"As soon as Detection is ON, your phone's motion and location sensors switch on.",
+    how2:"Speed, Rotation and Impact — all three signals are monitored separately.",
+    how3:"When all three trip at once, a 20-second countdown starts.",
+    how4:"If you're okay, press Cancel to stop it.",
+    how5:"If not cancelled, an alert with your location is sent to family/favourites.",
+    favourites:"Favourites", findUsers:"Find users", searchPh:"Search by username...",
+    received:"Received", sent:"Sent",
+    changeAvatar:"Change avatar", lblConditions2:"Medical conditions", lblBio:"Bio",
+    lblPolice:"Police number", lblAmbulance:"Ambulance number", btnSave:"Save", logout:"Logout",
+    navHome:"Home", navContacts:"Contacts", navAlerts:"Alerts", navProfile:"Profile",
+    cdTitle:"ACCIDENT DETECTED",
+    cdSub:"If you're okay, press Cancel. Otherwise an emergency alert will be sent automatically.",
+    cdCancel:"Cancel — I'm okay",
+    sendAlert:"Send emergency alert", close2:"Close",
+    ringOn:"Detector is on", ringOff:"Detector is off",
+    subOn:"Sensors are monitoring", subOff:"Turn on to start your protection",
+    standbyOn:"Safety active", standbyOff:"Safety standby",
+    emptyFav:"No favourites yet",
+    emptyReceived:"No alerts received", emptySent:"You haven't sent any alerts",
+    sosConfirm:"Shake detected — starting SOS",
+  }
+};
+let currentLang = localStorage.getItem('rc_lang') || 'hi';
+function t(key){ return (I18N[currentLang] && I18N[currentLang][key]!==undefined) ? I18N[currentLang][key] : (I18N.hi[key] || key); }
+function applyLang(){
+  document.documentElement.lang = currentLang;
+  $all('[data-i18n]').forEach(el=>{ const k=el.dataset.i18n; if(I18N[currentLang][k]!==undefined) el.innerHTML = I18N[currentLang][k]; });
+  $all('[data-i18n-ph]').forEach(el=>{ const k=el.dataset.i18nPh; if(I18N[currentLang][k]!==undefined) el.placeholder = I18N[currentLang][k]; });
+  $all('.lang-btn').forEach(b=> b.textContent = currentLang==='hi' ? 'EN' : 'हिं');
+  if(typeof updateDetectorUI==='function') updateDetectorUI();
+  if(typeof renderFavourites==='function') renderFavourites();
+  if(typeof renderAlerts==='function') renderAlerts();
+}
+function toggleLang(){
+  currentLang = currentLang === 'hi' ? 'en' : 'hi';
+  localStorage.setItem('rc_lang', currentLang);
+  applyLang();
+}
+$all('#langToggle, #langToggleAuth').forEach(b=> b.addEventListener('click', toggleLang));
+
+/* ============================================================
+   DARK MODE
+============================================================ */
+let currentTheme = localStorage.getItem('rc_theme') || 'light';
+function applyTheme(){
+  if(currentTheme === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  else document.documentElement.removeAttribute('data-theme');
+}
+function toggleTheme(){
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('rc_theme', currentTheme);
+  applyTheme();
+}
+$all('#themeToggle, #themeToggleAuth').forEach(b=> b.addEventListener('click', toggleTheme));
+applyTheme();
+
+/* ============================================================
+   LIVE LOCATION MAP
+============================================================ */
+let liveMap = null, liveMarker = null, mapWatchId = null;
+function initMap(){
+  if(liveMap || typeof L === 'undefined') return;
+  const mapEl = document.getElementById('liveMap');
+  if(!mapEl) return;
+  liveMap = L.map(mapEl, { attributionControl:false }).setView([20.5937,78.9629], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19 }).addTo(liveMap);
+  L.control.attribution({ prefix:false }).addAttribution('© OpenStreetMap').addTo(liveMap);
+}
+function updateMapPosition(lat, lng){
+  if(!liveMap) initMap();
+  if(!liveMap) return;
+  if(!liveMarker) liveMarker = L.marker([lat,lng]).addTo(liveMap);
+  else liveMarker.setLatLng([lat,lng]);
+  liveMap.setView([lat,lng], Math.max(liveMap.getZoom() || 0, 15));
+  const s = $('#mapStatus');
+  if(s){ s.textContent = t('mapLive'); s.classList.add('live'); }
+}
+function startMapWatch(){
+  if(mapWatchId !== null || !navigator.geolocation) return;
+  mapWatchId = navigator.geolocation.watchPosition((pos)=>{
+    updateMapPosition(pos.coords.latitude, pos.coords.longitude);
+    if(!detectionOn){ lastPosition = pos; maybeSaveLastLocation(pos); }
+  }, ()=>{ const s=$('#mapStatus'); if(s) s.textContent = t('mapDenied'); },
+  { enableHighAccuracy:true, maximumAge:5000, timeout:15000 });
+}
+function stopMapWatch(){
+  if(mapWatchId !== null && navigator.geolocation){ navigator.geolocation.clearWatch(mapWatchId); mapWatchId = null; }
+}
+
+/* ============================================================
+   SOS SHORTCUT (shake phone, or tap the SOS button)
+   Note: browsers cannot read the physical power button — shake
+   gesture is used as the practical equivalent.
+============================================================ */
+let shakeListenerActive = false;
+let shakeTimestamps = [];
+const SHAKE_MAG_THRESHOLD = 22;
+const SHAKE_COUNT = 3;
+const SHAKE_WINDOW_MS = 1500;
+function onShakeMotion(e){
+  const a = e.accelerationIncludingGravity;
+  if(!a || a.x===null) return;
+  const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+  if(mag > SHAKE_MAG_THRESHOLD){
+    const now = Date.now();
+    shakeTimestamps.push(now);
+    shakeTimestamps = shakeTimestamps.filter(ts=> now-ts < SHAKE_WINDOW_MS);
+    if(shakeTimestamps.length >= SHAKE_COUNT && profile && !countdownActive){
+      shakeTimestamps = [];
+      toast(t('sosConfirm'), 'danger');
+      startCountdown();
+    }
+  }
+}
+async function enableShakeDetection(){
+  if(shakeListenerActive) return true;
+  if(typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function'){
+    try{
+      const res = await DeviceMotionEvent.requestPermission();
+      if(res !== 'granted') return false;
+    }catch(e){ return false; }
+  }
+  window.addEventListener('devicemotion', onShakeMotion);
+  shakeListenerActive = true;
+  return true;
+}
+$('#sosFab').addEventListener('click', async ()=>{
+  await enableShakeDetection();
+  if(!profile || countdownActive) return;
+  startCountdown();
+});
 
 /* ============================================================
    AUTH VIEW WIRING
@@ -812,6 +1076,9 @@ async function loadProfileAndEnter(){
   loadFavourites().then(()=> loadAlerts());
   subscribeAlerts();
   restoreDetectionState();
+  initMap();
+  startMapWatch();
+  applyLang();
 }
 
 function showApp(){
@@ -828,6 +1095,7 @@ function showAuth(){
 
 async function doLogout(){
   setDetection(false);
+  stopMapWatch();
   await supa.auth.signOut();
   profile = null;
   showAuth();
@@ -845,6 +1113,7 @@ $all('.nav-btn').forEach(btn=>{
     $all('.page').forEach(p=>p.classList.add('hidden'));
     $('#page-' + btn.dataset.page).classList.remove('hidden');
     if(btn.dataset.page === 'alerts') renderAlerts();
+    if(btn.dataset.page === 'home'){ initMap(); setTimeout(()=>{ if(liveMap) liveMap.invalidateSize(); }, 60); }
   });
 });
 
@@ -855,9 +1124,9 @@ function updateDetectorUI(){
   const ring = $('#ringWrap');
   ring.classList.toggle('armed', detectionOn);
   $('#detectToggle').classList.toggle('on', detectionOn);
-  $('#ringLabel').textContent = detectionOn ? 'Detector chalu hai' : 'Detector band hai';
-  $('#ringSub').textContent = detectionOn ? 'Sensors monitor kar rahe hain' : 'On karke apni suraksha shuru karein';
-  $('#topSub').textContent = detectionOn ? 'Suraksha active' : 'Suraksha standby';
+  $('#ringLabel').textContent = detectionOn ? t('ringOn') : t('ringOff');
+  $('#ringSub').textContent = detectionOn ? t('subOn') : t('subOff');
+  $('#topSub').textContent = detectionOn ? t('standbyOn') : t('standbyOff');
 }
 
 function updateChipValue(name, text){
@@ -955,6 +1224,7 @@ async function setDetection(on){
     }
     $('#permBanner').classList.add('hidden');
     window.addEventListener('devicemotion', onDeviceMotion);
+    if(!shakeListenerActive){ window.addEventListener('devicemotion', onShakeMotion); shakeListenerActive = true; }
     if(navigator.geolocation){
       watchId = navigator.geolocation.watchPosition(onPosition, onPositionError, {
         enableHighAccuracy:true, maximumAge:1000, timeout:15000
@@ -1123,7 +1393,7 @@ async function loadFavourites(){
 function renderFavourites(){
   const strip = $('#favStrip');
   if(!favourites.length){
-    strip.innerHTML = '<div class="empty-state" style="padding:16px 4px;">Abhi koi favourite nahi hai</div>';
+    strip.innerHTML = `<div class="empty-state" style="padding:16px 4px;">${t('emptyFav')}</div>`;
     return;
   }
   strip.innerHTML = favourites.map(f=>`
@@ -1203,7 +1473,7 @@ function renderAlerts(){
   if(!profile){ return; }
   const filtered = allAlerts.filter(a => classifyAlert(a) === alertsTab);
   if(!filtered.length){
-    list.innerHTML = `<div class="empty-state">${alertsTab==='received' ? 'Koi alert receive nahi hua' : 'Aapne koi alert nahi bheja'}</div>`;
+    list.innerHTML = `<div class="empty-state">${alertsTab==='received' ? t('emptyReceived') : t('emptySent')}</div>`;
     return;
   }
   list.innerHTML = filtered.map(a=>{
@@ -1291,6 +1561,7 @@ $('#profileForm').addEventListener('submit', async (e)=>{
    BOOT
 ============================================================ */
 (async function boot(){
+  applyLang();
   const { data:{ session } } = await supa.auth.getSession();
   if(session){ await loadProfileAndEnter(); } else { showAuth(); }
 })();
