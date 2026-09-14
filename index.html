@@ -41,22 +41,12 @@
   .shell{
     position:relative;
     width:100%;
-    max-width:400px;
+    max-width:480px;
     min-height:100vh;
     background:var(--cream);
-    overflow:hidden;
+    overflow:visible;
     display:flex;
     flex-direction:column;
-  }
-  @media (min-width:480px){
-    body{ padding:28px 0; }
-    .shell{
-      min-height:auto;
-      height:844px;
-      margin-top:8px;
-      border-radius:38px;
-      box-shadow:0 40px 70px -25px rgba(15,46,43,.45), 0 0 0 9px var(--teal-deep), 0 0 0 12px #08201d;
-    }
   }
   .hidden{ display:none !important; }
   .view{ display:flex; flex-direction:column; flex:1; min-height:0; }
@@ -122,7 +112,7 @@
 
   /* ---------- Modal / overlays ---------- */
   .modal-overlay, .overlay{
-    position:absolute; inset:0; background:rgba(15,46,43,.5); backdrop-filter:blur(2px);
+    position:fixed; inset:0; background:rgba(15,46,43,.5); backdrop-filter:blur(2px);
     display:flex; align-items:flex-end; justify-content:center; z-index:50; padding:0;
   }
   .modal-overlay.center, .overlay.center{ align-items:center; padding:24px; }
@@ -299,7 +289,8 @@
 
   /* ---------- Toast ---------- */
   .toast-container{
-    position:absolute; left:0; right:0; bottom:96px; display:flex; flex-direction:column; align-items:center;
+    position:fixed; left:0; right:0; bottom:28px; max-width:440px; margin:0 auto;
+    display:flex; flex-direction:column; align-items:center;
     gap:8px; z-index:120; pointer-events:none; padding:0 20px;
   }
   .toast{
@@ -309,6 +300,70 @@
   }
   .toast.danger{ background:var(--brick); }
   @keyframes toastIn{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ============================================================
+     WEBSITE LAYOUT (desktop / wide screens)
+  ============================================================ */
+  @media (min-width:880px){
+    body{ padding:0; align-items:flex-start; }
+
+    .shell{ max-width:1180px; min-height:100vh; margin:0 auto; box-shadow:0 0 0 1px var(--line); }
+
+    /* auth screen becomes a centered card on an open page, not a phone panel */
+    .auth-wrap{
+      max-width:460px; margin:56px auto; width:100%;
+      background:var(--paper); border:1px solid var(--line); border-radius:26px;
+      box-shadow:0 40px 80px -40px rgba(15,46,43,.3);
+      padding:46px 44px;
+    }
+
+    /* header becomes a full-width site header */
+    .topbar{ padding:20px 40px; }
+
+    /* let the whole page scroll normally instead of an inner scroll box */
+    .pages{ overflow-y:visible; flex:none; }
+
+    /* turn the bottom tab bar into a top website nav */
+    .bottomnav{
+      order:-1; position:sticky; top:0; z-index:30;
+      border-top:none; border-bottom:1px solid var(--line);
+      padding:12px 40px; gap:6px; justify-content:flex-start;
+      background:var(--paper);
+    }
+    .nav-btn{
+      flex:none; flex-direction:row; gap:8px; padding:9px 20px;
+      font-size:13.5px; border-radius:10px;
+    }
+    .nav-btn.active{ background:var(--teal-soft); }
+    .nav-btn svg{ width:18px; height:18px; }
+
+    .page{ padding:32px 40px 56px; max-width:1180px; margin:0 auto; width:100%; }
+
+    /* home page becomes a two-column dashboard */
+    #page-home{
+      display:grid;
+      grid-template-columns:360px 1fr;
+      grid-template-areas:
+        "detector perm"
+        "detector signals"
+        "detector test"
+        "detector how";
+      gap:14px 32px;
+      align-items:start;
+    }
+    #page-home .detector-card{ grid-area:detector; padding-top:16px; }
+    #page-home .ring-wrap{ width:230px; height:230px; }
+    #page-home #permBanner{ grid-area:perm; }
+    #page-home .signals-grid{ grid-area:signals; }
+    #page-home .test-link{ grid-area:test; }
+    #page-home .how-card{ grid-area:how; }
+
+    /* other pages get a comfortable reading width */
+    #page-contacts, #page-alerts, #page-profile{ max-width:760px; margin:0 auto; width:100%; }
+
+    .fav-strip{ flex-wrap:wrap; overflow-x:visible; }
+  }
+
 </style>
 </head>
 <body>
