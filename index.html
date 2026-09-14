@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>RakshaConnect — Accident Alert</title>
+<title>RakshaConnect — Accident Alert + Live Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700">
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root{
     --cream:#F9FCFF;
@@ -40,7 +42,6 @@
   button, input, select, textarea{ font-family:inherit; }
   h1, h2, h3, h4, h5, h6{ font-family:var(--font-head); color:var(--teal); font-weight:500; margin:0; }
 
-  /* ========== WEBSITE SHELL (full width instead of phone frame) ========== */
   .shell{
     width:100%;
     max-width:1200px;
@@ -278,7 +279,7 @@
   .alert-card .call-links{ margin-top:6px; }
   .alert-card .call-chip{ padding:6px 10px; font-size:11.5px; }
 
-  /* ---------- Profile ---------- */
+  /* ---------- Profile + MAP ---------- */
   .avatar-upload{ display:flex; align-items:center; gap:14px; }
   .avatar-upload .avatar{ width:72px; height:72px; border-radius:20px; font-size:24px; }
   .call-links{ display:flex; gap:8px; flex-wrap:wrap; }
@@ -288,6 +289,75 @@
   }
   .call-chip svg{ width:14px; height:14px; }
   .call-chip.danger{ background:var(--brick-soft); color:var(--brick); }
+
+  /* ---------- MAP CARD (naya) ---------- */
+  .map-card {
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+    box-shadow: 0 8px 18px -10px rgba(0,0,0,.08);
+  }
+  .map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .map-header .section-title { font-size: 14px; }
+  .map-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .map-btn {
+    background: var(--teal-soft);
+    border: none;
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--teal-deep);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: .15s;
+  }
+  .map-btn:hover { background: #d0d4dd; }
+  .map-btn svg { width: 14px; height: 14px; }
+  .map-container {
+    width: 100%;
+    height: 240px;
+    border-radius: var(--radius-md);
+    background: #eef1f6;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+  .map-container .leaflet-control-attribution { font-size: 9px; }
+  .map-status {
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .map-status .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2ecc71;
+    display: inline-block;
+    animation: blink 1.5s infinite;
+  }
+  .map-status .dot.off { background: #b0b0b0; animation: none; }
+  @keyframes blink { 0%{opacity:1;} 50%{opacity:.3;} 100%{opacity:1;} }
 
   /* ---------- Countdown overlay ---------- */
   #countdownOverlay{ background:rgba(15,17,14,.9); flex-direction:column; gap:24px; padding:32px 26px; align-items:center; justify-content:center; z-index:80; }
@@ -321,6 +391,7 @@
     .cd-num{ width:130px; height:130px; font-size:46px; }
     .field-row{ flex-direction:column; gap:12px; }
     .profile-section{ padding:24px 18px; }
+    .map-container { height: 180px; }
   }
 </style>
 </head>
@@ -489,7 +560,7 @@
         <div id="alertsList" style="display:flex;flex-direction:column;gap:10px;"></div>
       </div>
 
-      <!-- PROFILE -->
+      <!-- PROFILE + LIVE MAP (updated) -->
       <div id="page-profile" class="page hidden">
         <div class="avatar-upload">
           <div class="avatar" id="profAvatar">R</div>
@@ -519,6 +590,29 @@
           </div>
           <button class="btn btn-primary btn-block" type="submit">Save karein</button>
         </form>
+
+        <!-- ===== NAYA MAP CARD: profile button ke paas live location ===== -->
+        <div class="map-card" id="liveMapCard">
+          <div class="map-header">
+            <p class="section-title">📍 Live Location</p>
+            <div class="map-actions">
+              <button class="map-btn" id="mapCenterBtn" type="button">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                Center
+              </button>
+              <button class="map-btn" id="mapRefreshBtn" type="button">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 10-2.5 5.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 7v5h-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+          <div class="map-container" id="liveMap"></div>
+          <div class="map-status" id="mapStatus">
+            <span class="dot off" id="mapDot"></span>
+            <span id="mapCoords">Location wait kar rahe hain…</span>
+          </div>
+        </div>
+
         <button class="btn btn-ghost btn-block" id="logoutBtn2" type="button">Logout</button>
       </div>
 
@@ -573,6 +667,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
 "use strict";
@@ -613,6 +709,11 @@ const SPEED_DROP_THRESHOLD = 8;
 const MIN_SPEED_FOR_DROP = 5;
 const SIGNAL_HOLD_MS = 4000;
 
+/* ---------- MAP VARIABLES ---------- */
+let map = null;
+let marker = null;
+let mapInitDone = false;
+
 /* ============================================================
    HELPERS
 ============================================================ */
@@ -646,6 +747,92 @@ function setAvatar(el, name, url){
   if(!el) return;
   if(url){ el.innerHTML = `<img src="${url}" alt="">`; }
   else { el.textContent = initials(name); }
+}
+
+/* ============================================================
+   MAP FUNCTIONS
+============================================================ */
+function initMap() {
+  if (mapInitDone) return;
+  const mapEl = document.getElementById('liveMap');
+  if (!mapEl) return;
+
+  // default center India (agar location na mile)
+  map = L.map('liveMap').setView([20.5937, 78.9629], 5);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  // custom marker icon (simple)
+  const customIcon = L.divIcon({
+    className: 'custom-map-marker',
+    html: `<div style="background:#F5325C; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9]
+  });
+
+  marker = L.marker([20.5937, 78.9629], { icon: customIcon }).addTo(map);
+  marker.bindPopup('Aapki location').openPopup();
+
+  mapInitDone = true;
+
+  // Agar lastPosition already hai to turant set karo
+  if (lastPosition) {
+    updateMapLocation(lastPosition.coords.latitude, lastPosition.coords.longitude);
+  }
+
+  // refresh button event
+  document.getElementById('mapRefreshBtn').addEventListener('click', function() {
+    if (lastPosition) {
+      updateMapLocation(lastPosition.coords.latitude, lastPosition.coords.longitude);
+      toast('Map refresh ho gaya');
+    } else {
+      // Try geolocation once
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          lastPosition = pos;
+          updateMapLocation(pos.coords.latitude, pos.coords.longitude);
+          toast('Location mil gayi');
+        }, function(err) {
+          toast('Location nahi mili: ' + err.message, 'error');
+        }, { enableHighAccuracy: true, timeout: 10000 });
+      } else {
+        toast('Geolocation support nahi hai', 'error');
+      }
+    }
+  });
+
+  document.getElementById('mapCenterBtn').addEventListener('click', function() {
+    if (map && marker) {
+      map.setView(marker.getLatLng(), 15);
+    }
+  });
+
+  // resize map after container visible
+  setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+}
+
+function updateMapLocation(lat, lng) {
+  if (!map || !marker) return;
+  const latlng = [lat, lng];
+  marker.setLatLng(latlng);
+  marker.bindPopup(`Aap yahan hain<br>${lat.toFixed(5)}, ${lng.toFixed(5)}`).openPopup();
+  map.setView(latlng, 15);
+  // update status
+  const coordsEl = document.getElementById('mapCoords');
+  const dot = document.getElementById('mapDot');
+  if (coordsEl) coordsEl.textContent = `📍 ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  if (dot) { dot.classList.remove('off'); dot.style.background = '#2ecc71'; }
+  if (map) map.invalidateSize();
+}
+
+function setMapLoading(text) {
+  const coordsEl = document.getElementById('mapCoords');
+  const dot = document.getElementById('mapDot');
+  if (coordsEl) coordsEl.textContent = text || 'Location wait kar rahe hain…';
+  if (dot) { dot.classList.add('off'); dot.style.background = '#b0b0b0'; }
 }
 
 /* ============================================================
@@ -771,6 +958,17 @@ async function loadProfileAndEnter(){
   loadFavourites().then(()=> loadAlerts());
   subscribeAlerts();
   restoreDetectionState();
+
+  // Map init after profile page loads (but we can init now, will be hidden)
+  setTimeout(() => {
+    if (!mapInitDone) initMap();
+    // If we have last known location from profile, show it
+    if (profile && profile.last_lat && profile.last_lng && !lastPosition) {
+      // Use profile's last location if no live position yet
+      setMapLoading('Last known location');
+      updateMapLocation(profile.last_lat, profile.last_lng);
+    }
+  }, 500);
 }
 
 function showApp(){
@@ -778,6 +976,8 @@ function showApp(){
   $('#view-app').classList.remove('hidden');
   $('#topName').textContent = profile.name;
   setAvatar($('#topAvatar'), profile.name, profile.avatar_url);
+  // Map may be hidden, but we init anyway
+  setTimeout(() => { if (!mapInitDone) initMap(); }, 200);
 }
 
 function showAuth(){
@@ -802,8 +1002,21 @@ $all('.nav-btn').forEach(btn=>{
     $all('.nav-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     $all('.page').forEach(p=>p.classList.add('hidden'));
-    $('#page-' + btn.dataset.page).classList.remove('hidden');
+    const pageId = 'page-' + btn.dataset.page;
+    $('#'+pageId).classList.remove('hidden');
     if(btn.dataset.page === 'alerts') renderAlerts();
+    if(btn.dataset.page === 'profile') {
+      // Map refresh when profile page shown
+      setTimeout(() => {
+        if (!mapInitDone) initMap();
+        if (lastPosition) {
+          updateMapLocation(lastPosition.coords.latitude, lastPosition.coords.longitude);
+        } else if (profile && profile.last_lat && profile.last_lng) {
+          updateMapLocation(profile.last_lat, profile.last_lng);
+        }
+        if (map) map.invalidateSize();
+      }, 200);
+    }
   });
 });
 
@@ -886,6 +1099,12 @@ function onPosition(pos){
     lastSpeedSample = { speed, t: now };
   }
   maybeSaveLastLocation(pos);
+  // Update map live
+  if (map && marker) {
+    updateMapLocation(pos.coords.latitude, pos.coords.longitude);
+  } else if (!mapInitDone) {
+    // store for later
+  }
 }
 function onPositionError(err){ console.warn('geolocation error', err); }
 
